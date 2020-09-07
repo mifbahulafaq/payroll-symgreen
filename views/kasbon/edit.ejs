@@ -1,0 +1,98 @@
+<%
+function time(time){
+  return (time <= 9)?'0'+time:time;
+}
+%>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>General Form</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">General Form</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- left column -->
+        
+        <div class="col-md-11">
+          <% if(messages.error){ %>
+            <div class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h5><i class="icon fas fa-ban"></i> Gagal!</h5>
+              <%= messages.error  %>
+            </div> 
+            <% } %>
+          <!-- Horizontal Form -->
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title">Horizontal Form</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form method="POST" action="/kasbon" class="form-horizontal">
+              <div class="card-body">
+                <div class="form-group row">
+                  <label for="np" class="col-sm-2 col-form-label">NIP</label>
+                  <div class="col-sm-4">
+                    <input name="np" type="number" class="form-control" id="np" value="<%= data.idPegawai.nip %>" readonly>
+                  </div>
+                </div>
+                
+                <div class="form-group row">
+                  <label for="jmlKasbon" class="col-sm-2 col-form-label">Jumlah</label>
+                  <div class="col-sm-4">
+                    <input name="jmlKasbon" type="text" class="form-control currency" id="jmlKasbon" value="<%= data.jmlKasbon %>" required>
+                  </div>
+                </div>
+
+                <%
+                  const tanggal = new Date(data.tglKasbon);
+
+                %>
+                <div class="form-group row">
+                  <label for="tglKasbon" class="col-sm-2 col-form-label">Tanggal Kasbon</label>
+                  <div class="col-sm-4">
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                          </div>
+                          <input id="tglKasbon" name="tglKasbon" type="date" class="form-control" value="<%= time(tanggal.getFullYear()) %>-<%= time(tanggal.getMonth()+1) %>-<%= time(tanggal.getDate()) %>" required>
+                        </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer">
+                <input type="hidden" name="id" value="<%= data._id %>">
+                <input type="hidden" name="_method" value="PUT">
+                <button type="submit" class="btn btn-info"> <i class="fa fa-save"></i> Ubah</button>
+                <button type="reset" class="btn btn-default">Reset</button>
+              </div>
+              <!-- /.card-footer -->
+            </form>
+          </div>
+          <!-- /.card -->
+
+        </div>
+        <!--/.col (left) -->
+        
+      </div>
+      <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

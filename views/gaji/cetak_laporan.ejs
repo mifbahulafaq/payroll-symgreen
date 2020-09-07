@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin-top: 2cm;
+        }
+        h1, h4{
+            text-align: center;
+        }
+        table{
+            margin: auto;
+            font-size: 12px;
+            width: 95%;
+            border: solid 1px black;
+            text-align: center;
+        }
+        th{
+            font-size: 14px;
+            background-color: burlywood;
+            }
+        td, th{
+            border: solid 1px black;
+        }
+    </style>
+</head>
+<body>
+    <%
+    function time(time){
+        return (time <= 9)?'0'+time:time;
+      }
+    const tanggal = new Date(tglPenggajian);
+    %>
+    <h1>PT. SYMGREEN</h1>
+    <h4>Laporan Gaji Pegawai Tanggal : <%= tanggal.getDate()%>/<%= time(tanggal.getMonth()+1)%>/<%= tanggal.getFullYear()%></h4>
+    <table cellspacing="0" cellpadding="5">
+        <tr>
+            <th>Jenis Kelamin</th>
+            <th>NIP</th>
+            <th>Nama</th>
+            <th>Bagian</th>
+            <th>Tanggal hitung</th>
+            <th>Masuk/Hari</th>
+            <th>Lembur/Jam</th>
+            <th>Insentif</th>
+            <th>Uang Tambahan</th>
+            <th>Uang Lembur</th>
+            <th>Potongan Kasbon</th>
+            <th>Total Gaji</th>
+            <th>Gaji Diterima</th>
+        </tr>
+        <%
+        function rupiah(nilai){
+            const sisa = nilai.toString().length % 3
+            let rupiah = nilai.toString().substr(0,sisa)
+            let ribu = nilai.toString().substr(sisa).match(/\d{3}/gi)//the method match() retrieves the result ofmatching a string against a regex, and become a array
+            separator = sisa && nilai.toString().length > 3?'.':'';
+              
+            if(ribu){
+              rupiah+=separator+ribu.join('.')
+            }
+            return (rupiah != 0)? "Rp. "+rupiah : rupiah;
+          
+      
+        }
+        dataG.forEach((e,i)=>{ 
+            
+            const mulaiTglHit = new Date(e.mulaiTglHit);
+            const akhirTglHit = new Date(e.akhirTglHit);
+            %>
+
+            <tr>
+                <td style="text-align: left;"><%= e.idPegawai.jenKelamin %></td>
+                <td><%= e.idPegawai.nip %></td>
+                <td style="text-align: left;"><%= e.idPegawai.nama %></td>
+                <td style="text-align: left;"><%= e.idPegawai.idBagian.namaJenis %></td>
+                <td style="text-align: left;"><%= mulaiTglHit.getDate()%>/<%= time(mulaiTglHit.getMonth()+1)%>/<%= mulaiTglHit.getFullYear()%> - <%= akhirTglHit.getDate()%>/<%= time(akhirTglHit.getMonth()+1)%>/<%= akhirTglHit.getFullYear()%></td>
+                <td><%= e.jumHariMasuk %></td>
+                <td><%= e.jumJamLembur %></td>
+                <td><%= rupiah(e.idPegawai.insentif) %></td>
+                <td><%= rupiah(e.uangTambahan) %></td>
+                <td><%= rupiah(e.uangLembur) %></td>
+                <td><%= rupiah(e.potKasbon) %></td>
+                <td><%= rupiah(e.totGaji) %></td>
+                <td><%= rupiah(e.gajiDiTerimah) %></td>
+            </tr>
+        <% }) %>
+
+    </table>
+</body>
+</html>

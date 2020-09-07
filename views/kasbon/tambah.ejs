@@ -1,0 +1,86 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>General Form</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">General Form</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          
+          <div class="col-md-11">
+            <% if(messages.error){ %>
+              <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Gagal!</h5>
+                <%= messages.error  %>
+              </div> 
+              <% } %>
+            <!-- Horizontal Form -->
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Horizontal Form</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form method="POST" action="/kasbon/tambah" class="form-horizontal">
+                <div class="card-body">
+                  <div class="form-group row">
+                    <label for="np" class="col-sm-2 col-form-label">NIP</label>
+                    <div class="col-sm-4">
+                      <input name="nip" type="number" class="form-control" id="nip" required>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group row">
+                    <label for="jmlKasbon" class="col-sm-2 col-form-label">Jumlah</label>
+                    <div class="col-sm-4">
+                      <input name="jmlKasbon" type="text" class="form-control currency" id="jmlKasbon" required>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="tglKasbon" class="col-sm-2 col-form-label">Tanggal Kasbon</label>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                            </div>
+                            <input id="tglKasbon" name="tglKasbon" type="date" class="form-control" required>
+                          </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-info"> <i class="fa fa-save"></i> Tambah</button>
+                  <button type="reset" class="btn btn-default">Reset</button>
+                </div>
+                <!-- /.card-footer -->
+              </form>
+            </div>
+            <!-- /.card -->
+
+          </div>
+          <!--/.col (left) -->
+          
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->

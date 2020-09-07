@@ -1,0 +1,167 @@
+<%
+function time(time){
+  return (time <= 9)?'0'+time:time;
+}
+%>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>DataTables</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">DataTables</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+        <!--table 2-->
+       <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+
+
+
+              </div>
+              <%
+              const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+              const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+            %>
+
+              <!-- /.card-header -->
+              <div class="card-body table-responsive">
+                <div class="row" style="margin: 0px 0px 3px 0px;">
+                  <a target="_blank" class="btn btn-success btn-sm" href="/gaji/cetak_laporan/<%= Date.parse(tanggal) %>"><i class="fa fa-print"></i> Cetak Laporan</a>
+                  
+
+                  <form action="/gaji/laporan_search" method="POST" class="input-group input-group-sm col-3" style="margin: 0px 0px 0px 0px;">
+                    <input type="date" name="inputSearch" class="form-control" value="<%= tanggal.getFullYear()%>-<%= time(tanggal.getMonth()+1) %>-<%= time(tanggal.getDate())%>">
+                    <span class="input-group-append">
+                      <button type="submit" name="search" class="btn btn-success btn-sm">Tampilkan</button>
+                    </span>
+                  </form>
+                </div>
+                <% if(messages.success){ %>
+                  <div style="margin: 0px 20px 0px 20px; width: 1040px;" class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h5><i class="icon fas fa-check"></i> Berhasil!</h5>
+                    <%= messages.success %>
+                  </div>
+                <% } %>
+                <div class="alert" style="margin: 0px 0px 0px 0px; background-color: #99ccff ;">Laporan Gaji Hari <strong><%= hari[tanggal.getDay()]%>, <%= time(tanggal.getDate())%> <%= bulan[tanggal.getMonth()]%> <%= tanggal.getFullYear()%></strong></strong>
+                </div>
+
+                    <table id="example2" class="table table-bordered table-hover">
+                      
+                      <thead>
+
+                      <tr>
+                        <th>No.</th>
+                        <th>NIP</th>
+                        <th>Nama</th>
+                        <!-- <th>Status</th> -->
+                        <th>Uang lembur</th>
+                        <th>Potongan Kasbon</th>
+                        <th>Total Gaji</th>
+                        <th>Gaji Di terimah</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                          
+                        <%
+    
+                        let no = 1;
+                  
+                        function rupiah(nilai){
+                            const sisa = nilai.toString().length % 3
+                            let rupiah = nilai.toString().substr(0,sisa)
+                            let ribu = nilai.toString().substr(sisa).match(/\d{3}/gi)//the method match() retrieves the result ofmatching a string against a regex, and become a array
+                            separator = sisa && nilai.toString().length > 3?'.':'';
+                              
+                            if(ribu){
+                              rupiah+=separator+ribu.join('.')
+                            }
+                            return "Rp. "+rupiah;
+                          
+                      
+                        }
+                            dataG.forEach((eG,iG)=>{
+                              let bg = 'bg-danger';
+                              let potongan = '';
+                              const mulaiTglHit = new Date(eG.mulaiTglHit);
+                              const akhirTglHit = new Date(eG.akhirTglHit);
+                  
+                              if(eG.potKasbon > 0) potongan = `- ${rupiah(eG.potKasbon)}`;
+                              if(eG.status == 'Diterima') bg = 'bg-success';
+
+
+                              %>
+                                <tr>
+                                  <td><%= iG+1%></td>
+                                  <td><%= eG.idPegawai.nip%></td>
+                                  <td><%= eG.idPegawai.nama%></td>
+                                  <!-- <td><%= eG.status%></td> -->
+                                  <td><%= rupiah(eG.uangLembur)%></td>
+                                  <td><%= rupiah(eG.potKasbon)%></td>
+                                  <td><%= rupiah(eG.totGaji)%></td>
+                                  <td><%= rupiah(eG.gajiDiTerimah)%></td>
+                                  <td>
+                                     <div class="row " >
+                                      <!-- <button type="button" class="btn btn-success btn-sm btnDetailGaji"
+                                      data-toggle="modal" data-target="#myModal"
+                                      data-idA="<%= eG.id%>"
+                                      data-nama="<%= eG.idPegawai.nama%>" 
+                                      data-sift="<%= eG.sift%>" 
+                                      data-status="<%= eG.status%>"
+                                      data-jamMasuk="<%= eG.jamMasuk%>"
+                                      data-jamPulang="<%= eG.jamPulang%>"
+                                      data-ket="<%= eG.ket%>"
+                                      ><i class="fa fa-edit"></i> Detail
+                                      </button> -->
+                    
+
+
+                                        <form action="/gaji/slip" method="POST">
+                                          <input type="hidden" name="idGaji" value="<%= eG.id %>">
+                                          <input type="hidden" name="idPegawai" value="<%= eG.idPegawai.id %>">
+                                          <button formtarget="_blank" type="submit" class="btn btn-success btn-sm" style="color: white;">
+                                            <i style="color: white;" class="fa fa-print"></i> Cetak/Diterima
+                                          </button>
+                                        </form>
+                                    </div>
+                                  </td>
+                                </tr>
+                          <% }) %>
+
+                      </tbody>
+                    </table>
+              </div>
+              <!-- /.card-body -->
+            </form>
+            </div>
+
+
+          </div>
+        </div>
+        <!-- /.row -->
+
+
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+
+ 

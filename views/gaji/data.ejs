@@ -1,0 +1,525 @@
+<%
+function time(time){
+  return (time <= 9)?'0'+time:time;
+}
+%>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>DataTables</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">DataTables</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+       <!-- /.row -->
+      <!-- table 1 -->
+
+      <%
+    
+      let no = 1;
+      let tableRow1 = '';
+      let tableRow2 = '';
+
+      function rupiah(nilai){
+          const sisa = nilai.toString().length % 3
+          let rupiah = nilai.toString().substr(0,sisa)
+          let ribu = nilai.toString().substr(sisa).match(/\d{3}/gi)//the method match() retrieves the result ofmatching a string against a regex, and become a array
+          separator = sisa && nilai.toString().length > 3?'.':'';
+            
+          if(ribu){
+            rupiah+=separator+ribu.join('.')
+          }
+          return "Rp. "+rupiah;
+        
+    
+      }
+
+       dataP.forEach((eP,iP)=>{
+        let bool = false;
+
+          dataG.forEach((eG,iG)=>{
+            let bg = 'bg-danger';
+            const mulaiTglHit = new Date(eG.mulaiTglHit);
+            const akhirTglHit = new Date(eG.akhirTglHit);
+            
+            const tglPenggajian = new Date(eG.tglPenggajian);
+
+            if(eG.status == 'Diterima') bg = 'bg-success';
+            if(eP.id == eG.idPegawai.id){
+              bool = true;
+              return tableRow2 = tableRow2 + `
+              <tr>
+                <td>${iG+1}</td>
+                <td>${eG.idPegawai.nip}</td>
+                <td>${eG.idPegawai.nama}</td>
+                <td><p class="${bg}" style="width: fit-content;">${eG.status}</p></td>
+                <td>${rupiah(eG.uangLembur)}</td>
+                <td style="color: red;">${rupiah(eG.potKasbon)}</td>
+                <td>${rupiah(eG.totGaji)}</p></td>
+                <td>${rupiah(eG.gajiDiTerimah)}</td>
+                <td>
+                  <!-- <div class="row btn-group" style="margin-left:10px;">
+                    <button type="button" class="btn btn-success btn-sm btnDetailGaji"
+                    data-toggle="modal" data-target="#myModal"
+                    data-idA="${eG.id}"
+                    data-nama="${eG.idPegawai.nama}" 
+                    data-sift="${eG.sift}" 
+                    data-status="${eG.status}"
+                    data-jamMasuk="${eG.jamMasuk}"
+                    data-jamPulang="${eG.jamPulang}"
+                    data-ket="${eG.ket}"
+                    ><i class="fa fa-edit"></i> Detail
+                    </button> -->
+                  <div class="row" style="margin-left:10px;">
+
+                    ${
+                      (eG.status == `Diterima`)
+                      ?
+                      ` 
+                      <button  style="margin-right: 2px;" type="button" class="btn btn-sm btn-success btnDetailGaji"
+                      data-toggle="modal"
+                      data-target="#modalDetailGaji"
+                      data-status="${eG.status}"
+                      data-tglPenggajian="${time(tglPenggajian.getDate())}/${time(tglPenggajian.getMonth()+1)}/${tglPenggajian.getFullYear()}"
+                      data-mulaiTglHit="${time(mulaiTglHit.getDate())}/${time(mulaiTglHit.getMonth()+1)}/${mulaiTglHit.getFullYear()}"
+                      data-akhirTglHit="${time(akhirTglHit.getDate())}/${time(akhirTglHit.getMonth()+1)}/${akhirTglHit.getFullYear()}"
+                      data-nip="${eG.idPegawai.nip}"
+                      data-bagian="${eG.idPegawai.idBagian.namaJenis}"
+                      data-nama="${eG.idPegawai.nama}"
+                      data-insentif="${eG.idPegawai.insentif}"
+                      data-gajiPokok="${rupiah(eG.idPegawai.gajiPokok) }"
+                      data-totGajiPokok="${rupiah(eG.idPegawai.gajiPokok * eG.jumHariMasuk) }"
+                      data-jumharimasuk="${eG.jumHariMasuk}"
+                      data-jumJamLembur="${eG.jumJamLembur}"
+                      data-uangLembur="${rupiah(eG.uangLembur)}"
+                      data-uangTambahan="${rupiah(eG.uangTambahan)}"
+                      data-totGaji="${rupiah(eG.totGaji)}"
+                      data-potKasbon="${rupiah(eG.potKasbon)}"
+                      data-gajiDiterimah="${rupiah(eG.gajiDiTerimah)}"
+                      data-ket="${eG.ket}"
+                      ><i class="fa fa-list-alt"></i> Detail</button>                     
+                      <form  action="/gaji" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="id" value="${eG.id}">
+                        <button onclick="return confirm('Yakin ingin menghapus data?')" type="submit" class="btn btn-default btn-sm"><i class="fa fa-trash"></i></button>
+                      </form>
+
+                      `
+                      :
+                      `
+                      <button  style="margin-right: 2px;" type="button" class="btn btn-sm btn-success btnDetailGaji"
+                      data-toggle="modal"
+                      data-target="#modalDetailGaji"
+                      data-status="${eG.status}"
+                      data-tglPenggajian="${time(tglPenggajian.getDate())}/${time(tglPenggajian.getMonth()+1)}/${tglPenggajian.getFullYear()}"
+                      data-mulaiTglHit="${time(mulaiTglHit.getDate())}/${time(mulaiTglHit.getMonth()+1)}/${mulaiTglHit.getFullYear()}"
+                      data-akhirTglHit="${time(akhirTglHit.getDate())}/${time(akhirTglHit.getMonth()+1)}/${akhirTglHit.getFullYear()}"
+                      data-nip="${eG.idPegawai.nip}"
+                      data-bagian="${eG.idPegawai.idBagian.namaJenis}"
+                      data-nama="${eG.idPegawai.nama}"
+                      data-insentif="${eG.idPegawai.insentif}"
+                      data-gajiPokok="${rupiah(eG.idPegawai.gajiPokok) }"
+                      data-totGajiPokok="${rupiah(eG.idPegawai.gajiPokok) }"
+                      data-jumharimasuk="${eG.jumHariMasuk}"
+                      data-jumJamLembur="${eG.jumJamLembur}"
+                      data-uangLembur="${rupiah(eG.uangLembur)}"
+                      data-uangTambahan="${rupiah(eG.uangTambahan)}"
+                      data-totGaji="${rupiah(eG.totGaji)}"
+                      data-potKasbon="${rupiah(eG.potKasbon)}"
+                      data-gajiDiterimah="${rupiah(eG.gajiDiTerimah)}"
+                      data-ket="${eG.ket}"
+                      ><i class="fa fa-list-alt"></i> Detail</button>
+  
+                      <button  style="margin-right: 2px;" type="button" class="btn btn-sm btn-default btnUbahGaji"
+                      data-toggle="modal"
+                      data-target="#myModalUbah"
+                      data-id="${eG.id}"
+                      data-nip="${eG.idPegawai.nip}"
+                      data-nama="${eG.idPegawai.nama}"
+                      data-mulaiTglHit="${mulaiTglHit.getFullYear()}-${time(mulaiTglHit.getMonth()+1)}-${time(mulaiTglHit.getDate())}"
+                      data-akhirTglHit="${akhirTglHit.getFullYear()}-${time(akhirTglHit.getMonth()+1)}-${time(akhirTglHit.getDate())}"
+                      data-uangTambahan="${eG.uangTambahan}"
+                      data-ket="${eG.ket}"
+                      ><i class="fa fa-edit"></i> Edit</button>
+   
+                      <form  action="/gaji" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="id" value="${eG.id}">
+                        <button onclick="return confirm('Yakin ingin menghapus data?')" type="submit" class="btn btn-default btn-sm"><i class="fa fa-trash-alt"></i></button>
+                      </form>
+                      `
+
+                    }
+ 
+                  </div>
+                </td>
+              </tr>
+               `
+             }
+ 
+          })
+          if (bool == false){
+            tableRow1 =  tableRow1 + `                 
+            <tr>
+              <td>${no++}</td>
+              <td>${eP.nip}</td>
+              <td>${eP.nama}</td>
+              <td>${eP.jenKelamin}</td>
+              <td>
+                <button
+                 data-toggle="modal" data-target="#myModalTambah"
+                 data-id="${eP.id}"
+                 data-nip = "${eP.nip}"
+                 data-nama = "${eP.nama}"
+                 type="button" class="btn btn-sm btn-success btnTambahGaji"><i class="fa fa-edit"></i> Gaji</button>
+              </td>
+            </tr>
+            `
+          }
+
+ 
+        }) %>
+
+       <div class="row">
+        <div class="col-8">
+          <% if(messages.error){ %>
+            <div style="margin-bottom: 2px;" class="alert alert-danger alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h5><i class="icon fas fa-ban"></i> Gagal!</h5>
+              <p style="font-size: 15px;">
+                <%- messages.error %>
+              </p>
+            </div>
+            <% } %>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
+
+              <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                  <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0" style="height: 300px;">
+
+              <table class="table table-head-fixed">
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>NIP</th>
+                    <th>Nama</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%- tableRow1 %>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+      <!-- /.row -->
+
+        <!--table 2-->
+       <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+
+              </div>
+
+              <!-- /.card-header -->
+              <div class="card-body table-responsive">
+                <form style="margin: 0px 0px 3px -7px;" action="/gaji/search" method="POST" class="input-group input-group-sm col-3">
+                  <input type="date" name="inputSearch" class="form-control" value="<%= tanggal.getFullYear()%>-<%= time(tanggal.getMonth()+1) %>-<%= time(tanggal.getDate())%>">
+                  <span class="input-group-append">
+                    <button type="submit" name="search" class="btn btn-success btn-sm">Tampilkan</button>
+                  </span>
+                </form>
+            <%
+            const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+          %>
+          <% if(messages.success){ %>
+            <div style="margin-bottom: 3px; width: 1200px;" class="alert alert-success alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h5><i class="icon fas fa-check"></i> Berhasil!</h5>
+              <%= messages.success %>
+            </div>
+          <% } %>
+          <div class="alert" style="margin-bottom: 0px; background-color: #99ccff ; width: 1200px;">Data Gaji Hari <strong><%= hari[tanggal.getDay()]%>, <%= time(tanggal.getDate())%> <%= bulan[tanggal.getMonth()]%> <%= tanggal.getFullYear()%></strong>
+          </div>
+                <div class="table-responsive-lg">
+                  <table style="width: max-content; min-width: 1200px;" id="example2" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>NIP</th>
+                        <th>Nama</th>
+                        <th>Status</th>
+                        <th>Uang lembur</th>
+                        <th>Potongan Kasbon</th>
+                        <th>Total Gaji</th>
+                        <th>Gaji Bersih</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <%- tableRow2 %>
+                      </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </form>
+            </div>
+
+
+          </div>
+        </div>
+        <!-- /.row -->
+
+
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModalTambah" role="dialog" >
+    <div class="modal-dialog modal-lg" style="width: 580px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4> -->
+        </div>
+        <div class="modal-body modalTambahGaji">
+            <form action="/gaji" method="POST">
+                <div class="form-group row">
+
+                  <input type="hidden" name="tanggal" value="<%= tanggal.getFullYear() %>.<%= tanggal.getMonth()%>.<%= tanggal.getDate() %>">
+                  <input type="hidden" name="id" class="id">
+                  <label for="np" class="col-sm-3 col-form-label">NIP</label>
+                  <div class="col-sm-8">
+                    <input name="nip" type="number" class="form-control nip" disabled>
+                  </div>
+                </div>
+
+              <div class="form-group row">
+                <label for="np" class="col-sm-3 col-form-label">Nama</label>
+                <div class="col-sm-8">
+                  <input name="namaHide" type="hidden" class="form-control namaHide" >
+                  <input name="nama" type="text" class="form-control nama" disabled>
+                </div>
+              </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label">Tanggal Hitung</label>
+                  <div class="col-sm-8">
+                      <div class="input-group">
+                          <input name="mulaiTglHit" type="date" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy"  required data-mask style="margin-right: 10px;">
+                          -
+                          <input name="akhirTglHit" type="date" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy"  required data-mask style="margin-left: 10px;">
+                      </div>
+                        <!-- /.input group -->
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label for="np" class="col-sm-3 col-form-label">Uang Tambahan</label>
+                  <div class="col-sm-8">
+                    <input name="uangTambahan" type="text" class="form-control currency">
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label">Keterangan</label>
+                  <div class="col-sm-8">
+                    <textarea class="form-control" name="ket"  cols="30" rows="5"></textarea>
+                  </div>
+                </div>
+            
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success"> <i class="fa fa-save"></i> Tambahkan</button>
+            <button type="reset" class="btn btn-default">Reset</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="myModalUbah" role="dialog" >
+    <div class="modal-dialog modal-lg" style="width: 580px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4> -->
+        </div>
+        <div class="modal-body modalUbahGaji">
+            <form action="/gaji" method="POST">
+              <input type="hidden" name="_method" value="PUT">
+              <input type="hidden" name="id" class="id">
+                <div class="form-group row">
+                  
+                  <label for="nip" class="col-sm-3 col-form-label">NIP</label>
+                  <div class="col-sm-8">
+                    <input name="nip" type="number" class="form-control nip" disabled>
+                  </div>
+                </div>
+
+              <div class="form-group row">
+                <label for="np" class="col-sm-3 col-form-label">Nama</label>
+                <div class="col-sm-8">
+                  <input name="nama" type="text" class="form-control nama" disabled>
+                </div>
+              </div>
+
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label">Tanggal Hitung</label>
+                  <div class="col-sm-8">
+                      <div class="input-group">
+                          <input name="mulaiTglHit" type="date" class="form-control mulaiTglHit" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy"  required data-mask style="margin-right: 10px;">
+                          -
+                          <input name="akhirTglHit" type="date" class="form-control akhirTglHit" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy"  required data-mask style="margin-left: 10px;">
+                      </div>
+                        <!-- /.input group -->
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label for="" class="col-sm-3 col-form-label">Uang Tambahan</label>
+                  <div class="col-sm-8">
+                    <input name="uangTambahan" type="text" class="form-control currency uangTambahan">
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label">Keterangan</label>
+                  <div class="col-sm-8">
+                    <textarea class="form-control ket" name="ket"  cols="30" rows="5"></textarea>
+                  </div>
+                </div>
+            
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success"> <i class="fa fa-save"></i> Tambahkan</button>
+            <button type="reset" class="btn btn-default">Reset</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+   <!-- Modal -->
+
+   <div class="modal fade" id="modalDetailGaji" role="dialog" >
+    <div class="modal-dialog modal-lg" style="width: 600px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4> -->
+        </div>
+        <div class="modal-body modalDetailGaji">
+
+            <div class="container">         
+                <table id="tabelDetail">
+                  <tbody>
+                    <tr>
+                      <td>Status</td>
+                      <td class="status" colspan="2"></td>
+                    </tr>
+                    <tr>
+                      <td>Tanggal Penggajian</td>
+                      <td class="tglPenggajian" colspan="2"></td>
+                    </tr>
+                    <tr style="border-bottom: solid;">
+                      <td>Tanggal Hitung</td>
+                      <td class="tglHitung" colspan="2"></td>
+                    </tr>
+                    <tr>
+                      <td>NIP</td>
+                      <td class="nip" colspan="2"></td>
+                    </tr>
+                    <tr>
+                      <td>Bagian</td>
+                      <td class="bagian" colspan="2"></td>
+                    </tr>
+                    <tr style="border-bottom: solid;">
+                      <td>Nama</td>
+                      <td class="nama" colspan="2"></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #959494;">
+                        <td>Gaji Pokok</td>
+                        <td class="gajiPokokHari"></td>
+                        <td class="totGajiPokok"></td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #959494;">
+                        <td colspan="2">Insentif</td>
+                        <td class="insentif"></td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid #959494;">
+                        <td>Lembur</td>
+                        <td class="jumJamLembur"></td>
+                        <td class="uangLembur"></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">Uang Tambahan</td>
+                        <td class="uangTambahan"></td>
+                      </tr>
+                      <tr style="border-top: solid;">
+                        <td colspan="2">Total Gaji</td>
+                        <td class="totGaji"></td>
+                      </tr>
+                      <tr style="border-bottom: solid;">
+                        <td colspan="2">Potongan Kasbon</td>
+                        <td class="potKasbon"></td>
+                      </tr>
+                      <tr style="border-bottom: solid;">
+                        <td  colspan="2" ><strong>Jumlah Gaji Diterima</strong></td>
+                        <td class="gajiDiTerimah"></td>
+                      </tr>
+                      <tr>
+                        <td style="vertical-align: text-top;">Keterangan</td>
+                        <td class="ket" colspan="2" style="vertical-align: text-top;"></td>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
+
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,263 @@
+<%
+function time(time){
+  return (time <= 9)?'0'+time:time;
+}
+%>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>DataTables</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">DataTables</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+         <!-- /.row -->
+         <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+  
+
+  
+                </div>
+  
+                <!-- /.card-header -->
+                <%
+                const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+              %>
+                <div class="card-body">
+                  <div style="margin-bottom: 3px;" class="row">
+                    <form action="/lembur/search" method="POST" class="input-group input-group-sm col-3">
+                      <input type="date" name="inputSearch" class="form-control" value="<%= tanggal.getFullYear() %>-<%= time(tanggal.getMonth()+1) %>-<%= tanggal.getDate() %>">
+                      <span class="input-group-append">
+                        <button type="submit" name="search" class="btn btn-success btn-sm">Tampilkan</button>
+                      </span>
+                    </form>
+
+                    <button type="button" class="btn btn-success btn-sm btnModal" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i>  Tambah Data Lembur
+                      </button>
+                </div>
+
+                <% if(messages.error){ %>
+                  <div class="alert alert-danger alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <h5><i class="icon fas fa-ban"></i> Gagal!</h5>
+                      <%= messages.error  %>
+                  </div> 
+                  <% } %>
+
+                <div class="alert" style="margin-bottom: 0px; background-color: #99ccff ;">Data Lembur Hari <strong><%= hari[tanggal.getDay()]%>, <%= time(tanggal.getDate()) %> <%= bulan[tanggal.getMonth()]%> <%= tanggal.getFullYear()%></strong></strong>
+                </div>
+                    <div class="table-responsive-lg">
+                      <table id="example2" class="table table-bordered table-hover" >
+                        <thead>
+                        <tr>
+                          <th>No.</th>
+                          <th>NIP</th>
+                          <th>Nama</th>
+                          <th>Jam Masuk</th>
+                          <th>Jam Pulang</th>
+                          <th>Keterangan</th>
+                          <th>Aksi</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+      
+                          <%
+      
+                         let no = 1;
+      
+                          dataL.forEach((eL,iL)=>{ 
+                            const jamMasuk = new Date(eL.jamMasuk);
+                            const jamPulang = new Date(eL.jamPulang);
+                            const tanggalLem = new Date(eL.tanggal);
+                            %>
+
+                            <tr>
+                                <td><%= no++ %></td>
+                                <td><%= eL.idPegawai.nip %></td>
+                                <td><%= eL.idPegawai.nama %></td>
+                                <td><%= time(jamMasuk.getHours()) %>:<%= time(jamMasuk.getMinutes()) %></td>
+                                <td><%= time(jamPulang.getHours()) %>:<%= time(jamPulang.getMinutes()) %></td>
+                                <td><%= eL.ket %></td>
+                                <td>
+                                  <div class="row btn-group">
+                                    <button type="button" class="btn btn-success btn-sm btnUbahL"
+                                    data-toggle="modal" data-target="#myModalUbah"
+                                    data-idL="<%= eL.id %>"
+                                    data-tanggal="<%= tanggalLem.getFullYear() %>.<%= tanggalLem.getMonth()%>.<%= tanggalLem.getDate() %>"
+                                    data-nip="<%= eL.idPegawai.nip %>"
+                                    data-jamMasuk="<%= jamMasuk.getHours() %>:<%= jamMasuk.getMinutes() %>"
+                                    data-jamPulang="<%= jamPulang.getHours() %>:<%= jamPulang.getMinutes() %>"
+                                    data-ket="<%= eL.ket %>"
+                                    ><i class="fa fa-edit"></i> Ubah
+                                    </button>
+                                    
+                                    <form action="/lembur" method="POST">
+                                      <input type="hidden" name="id" value="<%= eL.id %>">
+                                      <input type="hidden" name="_method" value="DELETE">
+                                      <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-trash"></i> Hapus</button>
+                                    </form>
+
+                                  </div>
+
+                                    
+                                </td>
+                              </tr>
+      
+                         <% }) %>
+      
+      
+                          
+                        </tbody>
+                      </table>
+                    </div>
+  
+                 
+                  
+  
+                  
+                  
+                  
+                </div>
+                <!-- /.card-body -->
+              </form>
+              </div>
+  
+  
+            </div>
+          </div>
+          <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  
+  
+  <!-- Modal -->
+  <div class="modal fade" id="myModalUbah" role="dialog">
+    <div class="modal-dialog modal-sm-8">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4> -->
+        </div>
+        <div class="modal-body modalUbahL">
+            <form action="/lembur" method="POST">
+              <input type="hidden" name="_method" value="PUT">
+              <input type="hidden" name="id" class="id">
+              <input type="hidden" name="tanggal" class="tanggal">
+                <div class="form-group row">
+
+                  <label for="np" class="col-sm-3 col-form-label">NIP</label>
+                  <div class="col-sm-8">
+                    <input name="nip" type="number" class="form-control nip" required disabled>
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label for="np" class="col-sm-3 col-form-label">Jam Masuk</label>
+                  <div class="col-sm-8">
+                    <input name="jamMasuk" type="time" class="form-control jamMasuk" required>
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label for="np" class="col-sm-3 col-form-label">Jam Pulang</label>
+                  <div class="col-sm-8">
+                    <input name="jamPulang" type="time" class="form-control jamPulang" required>
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label">Keterangan</label>
+                  <div class="col-sm-8">
+                    <textarea class="form-control ket" name="ket"  cols="30" rows="5"></textarea>
+                  </div>
+                </div>
+            
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success"> <i class="fa fa-save"></i> Ubah</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModalTambah" role="dialog">
+    <div class="modal-dialog modal-sm-8">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4> -->
+        </div>
+        <div class="modal-body">
+            <form action="/lembur" method="POST">
+                <div class="form-group row">
+
+                    <input type="hidden" name="tanggal" value="<%= tanggal.getFullYear() %>.<%= tanggal.getMonth()%>.<%= tanggal.getDate() %>">
+
+                  <label for="np" class="col-sm-3 col-form-label">NIP</label>
+                  <div class="col-sm-8">
+                    <input name="nip" type="number" class="form-control" required>
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label for="np" class="col-sm-3 col-form-label">Jam Masuk</label>
+                  <div class="col-sm-8">
+                    <input name="jamMasuk" type="time" class="form-control" required>
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label for="np" class="col-sm-3 col-form-label">Jam Pulang</label>
+                  <div class="col-sm-8">
+                    <input name="jamPulang" type="time" class="form-control" required>
+                  </div>
+                </div>
+            
+            
+                <div class="form-group row">
+                  <label class="col-sm-3 col-form-label">Keterangan</label>
+                  <div class="col-sm-8">
+                    <textarea class="form-control" name="ket"  cols="30" rows="5"></textarea>
+                  </div>
+                </div>
+            
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success"> <i class="fa fa-save"></i> Tambahkan</button>
+            <button type="reset" class="btn btn-default">Reset</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+

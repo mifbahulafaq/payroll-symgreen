@@ -1,0 +1,174 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1></h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">General Form</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-11">
+            <!-- Horizontal Form -->
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Tambah Pegawai</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form method="POST" action="/pegawai/tambah" enctype="multipart/form-data" class="form-horizontal">
+                <div class="card-body">
+                  <div class="form-group row">
+                    <label for="np" class="col-sm-2 col-form-label">NIP</label>
+                    <div class="col-sm-5">
+                      <input name="nip" type="number" class="form-control" id="nip" required>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group row">
+                    <label for="nama" class="col-sm-2 col-form-label">Nama Lengkap</label>
+                    <div class="col-sm-5">
+                      <input name="nama" type="text" class="form-control" id="nama" required>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Jenis Kelamin</label>
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                              <input value="Laki-laki" class="custom-control-input" type="radio" id="customRadio1" name="jenKelamin" checked>
+                              <label for="customRadio1" class="custom-control-label">Laki-laki</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                              <input value="Perempuan" class="custom-control-input" type="radio" id="customRadio2" name="jenKelamin" >
+                              <label for="customRadio2" class="custom-control-label">Perempuan</label>
+                            </div>
+                          </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="tglLahir" class="col-sm-2 col-form-label">Tempat, Tanggal Lahir</label>
+                    <div class="col-sm-5">
+                      <div class="row">
+                        <div class="col-6">
+                          <input name="tempat" type="text" class="form-control" required >
+                        </div>
+                        <div class="col-6">
+                          <input name="tglLahir" id="tglLahir" type="date" class="form-control" required >
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Foto</label>
+                      <div class="col-sm-5">
+                        <% if(messages.errorImage){ %>
+                        <div style="margin-bottom: 2px;" class="alert alert-danger alert-dismissible">
+                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                          <h7><i class="icon fas fa-ban"></i> Failed : <%= messages.errorImage %></h7>
+                        </div>
+                        <% } %>
+                        <div class="custom-file">
+                          <input name="foto" type="file" class="custom-file-input" id="customFile" required>
+                          <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Alamat</label>
+                    <div class="col-sm-5">
+                      <textarea class="form-control" name="alamat"  cols="30" rows="2" required></textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Bagian</label>
+                    <div class="col-sm-5">
+                        <div class="form-group">
+                            <select name="idBagian" class="form-control" style="width: 100%;">
+                            <% data.forEach(e=>{ %>
+                              <option value="<%= e._id %>" selected="selected"><%= e.namaJenis %></option>
+                            <% }); %>
+                            </select>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="np" class="col-sm-2 col-form-label">Insentif</label>
+                    <div class="col-sm-5">
+                      <input name="insentif" type="text" class="form-control input currency
+                      " id="insentif" placeholder="0">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="np" class="col-sm-2 col-form-label">Gaji Pokok</label>
+                    <div class="col-sm-5">
+                      <input name="gajiPokok" type="text" class="form-control input currency
+                      " id="gajiPokok" placeholder="0" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="telpon" class="col-sm-2 col-form-label">No. Telpon</label>
+                    <div class="col-sm-5">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            </div>
+                            <input id="telpon" name="noTelp" type="text" class="form-control"  data-mask>
+                          </div>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group row">
+                    <label for="tglMasuk" class="col-sm-2 col-form-label">Tanggal Masuk</label>
+                    <div class="col-sm-5">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                            </div>
+                            <input id="tglMasuk" name="tglMasuk" type="date" class="form-control" required>
+                          </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-info"> <i class="fa fa-save"></i> Tambah</button>
+                  <button type="reset" class="btn btn-default">Reset</button>
+                </div>
+                <!-- /.card-footer -->
+              </form>
+            </div>
+            <!-- /.card -->
+
+          </div>
+          <!--/.col (left) -->
+          
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
