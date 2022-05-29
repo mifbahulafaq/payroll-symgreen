@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>General Form</h1>
+            <h1></h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">General Form</li>
+              <li class="breadcrumb-item active">Kasbon</li>
             </ol>
           </div>
         </div>
@@ -34,32 +34,32 @@
             <!-- Horizontal Form -->
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title">Horizontal Form</h3>
+                <h3 class="card-title">Tambah Kasbon</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form method="POST" action="/kasbon/tambah" class="form-horizontal">
+              <form method="POST" action="/kasbon" class="form-horizontal">
                 <div class="card-body">
                   <div class="form-group row">
-                    <label for="np" class="col-sm-2 col-form-label">NIP</label>
+                    <label for="nik" class="col-sm-2 col-form-label">NIK</label>
                     <div class="col-sm-4">
-                      <input name="nip" type="number" class="form-control" id="nip" required>
+                      <input name="nik" type="number" class="form-control" id="nik" required>
                     </div>
                   </div>
                   
                   <div class="form-group row">
-                    <label for="jmlKasbon" class="col-sm-2 col-form-label">Jumlah</label>
+                    <label for="jumlah" class="col-sm-2 col-form-label">Jumlah</label>
                     <div class="col-sm-4">
-                      <input name="jmlKasbon" type="text" class="form-control currency" id="jmlKasbon" required>
+                      <input name="jumlah" type="text" class="form-control currency" id="jumlah" required>
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="tglKasbon" class="col-sm-2 col-form-label">Tanggal Kasbon</label>
+                    <label for="tgl" class="col-sm-2 col-form-label">Tanggal Kasbon</label>
                     <div class="col-sm-4">
                         <div class="input-group">
                             <div class="input-group-prepend">
                             </div>
-                            <input id="tglKasbon" name="tglKasbon" type="date" class="form-control" required>
+                            <input id="tgl" name="tgl" type="date" class="form-control" required>
                           </div>
                     </div>
                   </div>

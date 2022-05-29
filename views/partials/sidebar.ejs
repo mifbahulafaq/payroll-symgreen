@@ -1,55 +1,31 @@
 <%
-  let dashboard = ''
-      pegawai = '',
-      absensi = '',
-      lembur = '',
-      kasbon = '',
-      dataGaji = '',
-      dropDown = '',
-      laporanGaji = '';
-
-  switch(page){
-    case 'pegawai/data': 
-    case 'pegawai/edit':
-    case 'pegawai/tambah':
-      pegawai = 'active';
-      break;
-    case 'kasbon/data': 
-    case 'kasbon/edit':
-    case 'kasbon/tambah': 
-      kasbon = 'active';
-      break;
-    case 'absensi/data':
-      absensi = 'active';
-      break;
-    case 'gaji/data':
-      dataGaji = 'active';
-      dropDown = 'menu-open';
-      break; 
-    case 'gaji/cetak_laporan':
-    case 'gaji/cetak_slip':
-    case 'gaji/laporan':
-      dropDown = 'menu-open';
-      laporanGaji = 'active';
-      break;  
-    case 'lembur/data':
-      lembur = 'active';
-      break;
-    default:
-      dashboard = 'active';
-      break; 
-  }
-
-
+const menu = {
+  dashboard : '',
+  dataKaryawan : '',
+  bagian : '',
+  dataKehadiran : '',
+  rekapKehadiran : '',
+  kasbon : '',
+  penggajian : '',
+  ubahPassword : '',
+}
+const dropDown = {
+  karyawan:'',
+  kehadiran:''
+}
+if(typeof dataMenu === 'string') menu[dataMenu] = 'active';
+if(typeof dataDropDown=== 'string') dropDown[dataDropDown] = 'menu-open'
 %>
 <!-- Main Sidebar Container -->
-<aside style="font-size: 15px;" class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a style="margin: auto;" href="index3.html" class="brand-link">
+    <a href="#" class="brand-link">
       <!-- <img src="/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8"> -->
-      <!-- <span class="brand-text font-weight-light">Administrator</span> -->
-      <p style="margin: 0px 0px 0px 30px;"><strong>KEPEGAWAIAN</strong></p>
+      <div class="titleSide">
+        <span>P</span><span class="brand-text">ENGGAJIAN</span>
+      </div>
+      <!-- <p style="margin: 0px 0px 0px 30px;"><strong>PENGGAJIAN</strong></p> -->
     </a>
 
     <!-- Sidebar -->
@@ -57,10 +33,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="/dist/img/userImage.png" class="img-circle elevation-2" alt="User Image">
+          <img src="/dist/img/userImage3.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Administrator</a>
+          <a href="#" class="d-block adminSide"><%= login %></a>
         </div>
       </div>
 <!-- Sidebar Menu -->
@@ -69,109 +45,129 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                
-          <li class="nav-item">
-            <a href="/" class="nav-link <%= dashboard %>">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="/pegawai/data" class="nav-link <%= pegawai %>" >
-              <i class="nav-icon fa fa-users"></i>
-              <p>
-                Pegawai
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="/absensi/data" class="nav-link <%= absensi %>" >
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>
-                Data Absensi
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="/lembur/data" class="nav-link <%= lembur %>" >
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>
-                Data Lembur
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="/kasbon/data" class="nav-link <%= kasbon %>">
-              <i class="nav-icon 	fa fa-credit-card"></i>
-              <p>
-                Kasbon
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item has-treeview <%= dropDown %>">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-edit"></i>
-              <p>
-                Penggajian
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="/gaji/data" class="nav-link <%= dataGaji %>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Data Gaji</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="/gaji/laporan" class="nav-link <%= laporanGaji %>">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Laporan Gaji</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          <%
           
-          <!-- <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Laporan
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Data Karyawan</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Data Gaji</p>
-                </a>
-              </li>
-            </ul>
-          </li> -->
+          const sideMenu = {
+            dash:`
+            <li class="nav-item">
+              <a href="/dashboard" class="nav-link ${menu.dashboard}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Dashboard
+                </p>
+              </a>
+            </li>
+            `,
+            kar:`
+            <li class="nav-item has-treeview ${dropDown.karyawan}">
+              <a href="#" class="nav-link" >
+                <i class="nav-icon fa fa-users"></i>
+                <p>
+                  Karyawan
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="/karyawan" class="nav-link ${menu.dataKaryawan}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Data Karyawan</p>
+                  </a>
+                </li>
+                ${
+                  login==="HRD"?`
+                  <li class="nav-item">
+                    <a href="/bagian" class="nav-link ${menu.bagian}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Bagian</p>
+                    </a>
+                  </li>
+                  `:``
+                }
+              </ul>
+            </li>
+            `,
+            keh:`
+            <li class="nav-item has-treeview ${dropDown.kehadiran}">
+              <a href="#" class="nav-link">
+                <i class="nav-icon far fa-calendar-alt"></i>
+                <p>
+                  Kehadiran
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                ${
+                  login==="Supervisor"
+                  ?
+                  `
+                  <li class="nav-item">
+                    <a href="/kehadiran" class="nav-link ${menu.dataKehadiran}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Data Kehadiran</p>
+                    </a>
+                  </li>
+                  `
+                  :
+                  `
+                  `
+                }
+                <li class="nav-item">
+                  <a href="/kehadiran/rekap" class="nav-link ${menu.rekapKehadiran}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Rekap Kehadiran</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            `,
+            kas:`
+            <li class="nav-item">
+              <a href="/kasbon" class="nav-link ${menu.kasbon}">
+                <i class="nav-icon 	fa fa-credit-card"></i>
+                <p>
+                  Kasbon
+                </p>
+              </a>
+            </li>
+            `,
+            gaji:`
+            <li class="nav-item">
+              <a href="/gaji" class="nav-link ${menu.penggajian}">
+                <i class="nav-icon far fa-edit"></i>
+                <p>
+                  Penggajian
+                </p>
+              </a>
+            </li>
+            `,
+            ubhPass:`
+            <li class="nav-item">
+              <a href="/ubah-password" class="nav-link ${menu.ubahPassword}">
+                <i class="nav-icon fas fa-cog"></i>
+                <p>
+                  Ubah Password
+                </p>
+              </a>
+            </li>
+            `,
+            logout:`
+            <li class="nav-item">
+              <a href="/logout" class="nav-link">
+                <i class="nav-icon fa fa-arrow-left"></i>
+                <p>
+                  Logout
+                </p>
+              </a>
+            </li>
+            `
+          }
+          
+          hakAkses[login].forEach(e=>{ %>
 
-          <li class="nav-item">
-            <a href="/auth/logout" class="nav-link">
-              <i class="nav-icon fa fa-arrow-left"></i>
-              <p>
-                Logout
-              </p>
-            </a>
-          </li>
-          
-          
-          
+            <%- sideMenu[e] %>
+
+          <%})%>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

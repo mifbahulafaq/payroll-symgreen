@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    body{
+        font-size: 14px;
+    }
+    #slip{
+        position: relative;
+        width: 11cm;
+        border:solid 2px black;
+    }
+
+    .header div, .tgl div, .periode div, .bagian div, .nama div, 
+    .gajiPokok div, .lembur div, .insentif div, .uangMakan div, 
+    .uangLainlain div, .potKasbon div, .potLainnya div, .jumGaji div, .ket div, .footer div
+    {
+        /* width:33%; */
+        display: inline-block;
+        position: relative;
+        /* margin-right: -4px; */
+        padding: 2px;
+    }
+
+    .img_slip{
+        width: 100%;
+        height: 100%;
+    }
+    .header div:first-child{
+        margin-left: 10px;
+        padding: 5px 0px 5px 0px;
+        width: 150px;
+        height: 40px;
+    }
+    .header div:nth-child(2){
+        /* margin-top: 0px;
+        padding: 5px 0px 5px 0px; */
+        position: absolute;
+        margin: 15px 0px 0px 15px;
+    }
+    .gajiPokok,.lembur,.insentif,.uangMakan,.uangLainlain,.potLainnya,.ket{
+        border-bottom:solid 1px  rgb(139, 135, 135);;
+    }
+    .header, .periode,.nama,.potKasbon{
+        border-bottom:solid 2px  black;
+    }
+    .tgl div:first-child,.periode div:first-child,.bagian div:first-child,.nama div:first-child,.gajiPokok div:first-child,.lembur div:first-child,.insentif div:first-child,.uangMakan div:first-child,.uangMakan div:first-child,.uangLainlain div:first-child,.potKasbon div:first-child,.potLainnya div:first-child,.ket div:first-child{
+        width: 28%;
+    }
+    .tgl div:nth-last-child(3),.periode div:nth-last-child(3),.bagian div:nth-last-child(3),.nama div:nth-last-child(3),.gajiPokok div:nth-last-child(3),.lembur div:nth-last-child(3),.insentif div:nth-last-child(3),.uangMakan div:nth-last-child(3),.uangMakan div:nth-last-child(3),.uangLainlain div:nth-last-child(3),.potKasbon div:nth-last-child(3),.potLainnya div:nth-last-child(3){
+        width: 40%;
+    }
+    .tgl div:last-child,.periode div:last-child,.bagian div:last-child,.nama div:last-child,.gajiPokok div:last-child,.lembur div:last-child,.insentif div:last-child,.uangMakan div:last-child,.uangMakan div:last-child,.uangLainlain div:last-child,.potKasbon div:last-child, .potLainnya div:last-child{
+        float: right;
+        margin-right: 5px;
+    }
+    .jumGaji div:nth-child(2){
+        width: 39%;
+    }
+    .jumGaji div:nth-child(4){
+        float: right;
+    }
+    .ket div:last-child{
+        vertical-align: top;
+        width: 65%;
+        word-wrap: break-word;
+    }
+    .footer div{
+        vertical-align: middle;
+        padding: 10px 0px 10px 5px;
+    }
+    .footer div:nth-child(2){
+        width: 50%;
+    }
+    
+
+    </style>
+</head>
+<body>
+    <%
+  
+    const {karyawan,bagian,gaji} = data[0];
+  
+    %>
+    <div id="slip">
+        <div class="header">
+            <div>
+                <img class="img_slip" src="symgreen.png" alt="logo">
+            </div>
+            <div>
+                <strong>BUKTI PENERIMAAN GAJI</strong>
+            </div>
+        </div>
+        <div class="tgl">
+            <div>Tanggal Penggajian</div>
+            <div>: <%= moment(gaji.tgl).format('DD/MM/YYYY') %></div>
+            <div>NIK.:</div>
+            <div><%= gaji.nik%> </div>
+        </div>
+        <div class="periode">
+            <div>Tanggal hitung</div>
+            <div>
+                : <%= moment(gaji.mulaiTglHit).format('DD/MM/YYYY')%> - <%= moment(gaji.akhirTglHit).format('DD/MM/YYYY')%>
+            </div>
+            <div></div>
+            <div></div>
+        </div>
+        <did class="bagian">
+            <div>Bagian</div>
+            <div>: <%= bagian.namaBagian %></div>
+            <div></div>
+            <div></div>
+        </did>
+        <div class="nama">
+            <div>Nama</div>
+            <div>: <%= karyawan.nama%></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="gajiPokok">
+            <div>Gaji Pokok</div>
+            <div>: <%= gaji.jumHariMasuk %> hari x <%= currency(karyawan.upahPerHari) %></div>
+            <div>:Rp</div>
+            <div><%= currency(gaji.gajiPokok)  %></div>
+        </div>
+        <div class="lembur">
+            <div>Lembur</div>
+            <div>: <%= gaji.jumJamLembur%> Jam</div>
+            <div>:Rp</div>
+            <div><%= currency(gaji.uangLembur)%></div>
+        </div>
+        <div class="insentif">
+            <div>Insentif</div>
+            <div></div>
+            <div>:Rp</div>
+            <div><%= currency(gaji.totInsentif) %></div>
+        </div>
+        <div class="uangMakan">
+            <div>Uang Makan</div>
+            <div></div>
+            <div>:Rp</div>
+            <div><%= currency(gaji.uangMakan) %></div>
+        </div>
+        <div class="uangLainlain">
+            <div>Uang Lain-lain</div>
+            <div></div>
+            <div>:Rp</div>
+            <div><%= currency(gaji.uangLainlain)%></div> 
+        </div>
+        <div class="potLainnya">
+            <div>Potongan Lainnya</div>
+            <div></div>
+            <div>:Rp</div>
+            <div><%= currency(gaji.potonganLainnya)%></div> 
+        </div>
+        <div class="potKasbon">
+            <div>Potongan Kasbon</div>
+            <div></div>
+            <div>:Rp</div>
+            <div><%= currency(gaji.potKasbon)%></div> 
+        </div>
+        <div class="jumGaji" style="border-bottom: double">
+            <div>Jumlah Gaji Diterima</div>
+            <div></div>
+            <div>:Rp</div>
+            <div><%= currency(gaji.jumGaji)%></div> 
+        </div>
+        <div class="ket">
+            <div>Keterangan</div>
+            <div>:</div>
+            <div><%= gaji.ket%></div>
+        </div>
+        <div class="footer">
+            <div>Dibuat Oleh <br> <b>HRD Dept</b></div>
+            <div></div>
+            <div>Yang Menerima: <br><br><br> <%= karyawan.nama %></div>
+        </div>
+    </div>
+</body>
+</html>

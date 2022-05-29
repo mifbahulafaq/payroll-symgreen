@@ -1,0 +1,404 @@
+<%
+function time(time){
+  return (time <= 9)?'0'+time:time;
+}
+%>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Kehadiran</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Kehadiran</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+       <!-- /.row -->
+       <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+              </div>
+
+              <!-- /.card-header -->
+              <div class="card-body">
+                  <form style="position: absolute; margin: 0px 0px 0px -7px;" action="/kehadiran/search" method="POST" class="input-group input-group-sm col-3">
+                    <input type="date" name="tgl" class="form-control" value="<%=  moment(tgl).format('YYYY-MM-DD') %>">
+                    <span class="input-group-append">
+                      <button type="submit" class="btn btn-success btn-sm">Tampilkan</button>
+                    </span>
+                  </form>
+                  <!-- <form action="/absensi/search" method="POST" class="col-3" style="margin: 0px 0px 0px 300px;">
+                      <div class="input-group input-group-sm ">
+                        <input type="date" name="inputSearch" class="form-control" value="2020-07-19">
+                        <span class="input-group-append">
+                          <button type="submit" name="search" class="btn btn-primary btn-sm">Search</button>
+                        </span>
+                      </div>
+                  </form> -->
+                  <form action="/kehadiran" method="POST">
+                    <button type="submit" class="btn btn-success btn-sm tambahDataKeh" style="visibility: none; margin: 0px 0px 5px 265px;" disabled> <i class="fa fa-save"></i> Simpan data kehadiran</button>
+                    <input type="hidden" name="tglKehadiran" value="<%= tgl %>">
+                    <!-- <div class="card-tools">
+                      <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+    
+                        <div class="input-group-append">
+                          <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                      </div>
+  
+                    </div> -->
+             
+                  <%
+                    const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                    const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                  %>
+                  <div class="alert" style="margin-bottom: 0px; background-color: #99ccff ;">Data Absensi Hari <strong><%= hari[moment(tgl).day()]%>, <%= moment(tgl).format('DD-MM-YYYY')%></strong></strong>
+                  </div>
+                  <div class="table-responsive-lg">
+                    <table id="example2" class="table-kehadiran table table-bordered table-hover" >
+                      <tr style="vertical-align: baseline;">
+                        <th class="alignment" rowspan="2">No.</th>
+                        <th class="alignment" rowspan="2">NIK</th>
+                        <th class="alignment" rowspan="2">Nama</th>
+                        <th colspan="5">Status</th>
+                        <th class="alignment" rowspan="2">Jam Lembur</th>
+                        <th class="alignment" rowspan="2">Keterangan</th>
+                        <th class="alignment" rowspan="2">Aksi</th>
+                      </tr>
+                      <tr>
+                        <th style="background-color: green;">Masuk</th>
+                        <th style="background-color: orange;">Sakit</th>
+                        <th style="background-color: orange;">Izin</th>
+                        <th style="background-color: red;">Alpha</th>
+                        <th style="background-color: red;">Libur</th>
+                      </tr>
+                      <tbody>
+    
+                        <%
+    
+                       let no = 1;
+    
+                        dataKar.forEach((eKar,iKar)=>{
+                          let html = '';
+                          dataKeh.forEach((eKeh,iKeh)=>{
+    
+                            if(eKar.nik == eKeh.nik){
+                              return html = `
+                                      <tr>
+                                        <td>${no++}</td>
+                                        <td>${eKar.nik}</td>
+                                        <td>${eKar.nama}</td>
+                                        <td><b>${eKeh.statusKeh=='Masuk'?'&#10003':''}</b> </td>
+                                        <td><b>${eKeh.statusKeh=='Sakit'?'&#10003':''}</b></td>
+                                        <td><b>${eKeh.statusKeh=='Izin'?'&#10003':''}</b></td>
+                                        <td><b>${eKeh.statusKeh=='Alpa'?'&#10003':''}</b></td>
+                                        <td><b>${eKeh.statusKeh=='Libur'?'&#10003':''}</b></td>
+                                        <td>${eKeh.jamLembur}</td>
+                                        <td>${eKeh.ket}</td>
+                                        <td>
+                                          ${
+                                            (login==="Supervisor")?`
+                                              <button type="button" class="btn btn-default btn-sm btnUbahKeh"
+                                              data-toggle="modal" data-target="#myModal"
+                                              data-idKeh="${eKeh.idKehadiran}"
+                                              data-nama="${eKar.nama}" 
+                                              data-statusKeh="${eKeh.statusKeh}"
+                                              data-jamLembur="${eKeh.jamLembur}"
+                                              data-ket="${eKeh.ket}"
+                                              data-tgl="${tgl}"
+                                              ><i class="fa fa-edit"></i>
+                                              </button>
+  
+                                                <a href="/kehadiran/delete?id=${eKeh.idKehadiran}&date=${tgl}" class="btn btn-default btn-sm" onclick="return confirm('Yakin ingin menghapus data?')"><i class="fa fa-trash-alt"></i></a>
+                                              `:``
+                                          }
+
+                                            
+                                        </td>
+                                      </tr>
+                              `
+                            }
+    
+                          })
+    
+                          if(html == ''){
+                            html = `
+                            <tr class="rowInput">
+                              <td>${no++}</td>
+                              <td>${eKar.nik}</td>
+                              <td>${eKar.nama}</td>
+                              <input class="inputKeh" data-name="nik" type="hidden" value="${eKar.nik}"">
+                              <input class="inputKeh" data-name="tgl" type="hidden" value="${moment(tgl).format('YYYY-MM-DD')}">
+                              <td>
+                                <div class="icheck-success d-inline">
+                                  <input value="Masuk" type="radio" id="masuk${iKar}" required>
+                                  <label class="inputKeh" data-name="statusKeh${iKar}" style="display: none;" for="masuk${iKar}">
+                                  </label>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="icheck-warning d-inline">
+                                  <input value="Sakit" type="radio" id="sakit${iKar}" required>
+                                  <label class="inputKeh" data-name="statusKeh${iKar}" style="display: none;" for="sakit${iKar}">
+                                  </label>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="icheck-warning d-inline">
+                                  <input value="Izin" type="radio" id="izin${iKar}" required>
+                                  <label class="inputKeh" data-name="statusKeh${iKar}" style="display: none;" for="izin${iKar}">
+                                  </label>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="icheck-danger d-inline">
+                                  <input value="Alpa" type="radio" id="alpha${iKar}" required>
+                                  <label class="inputKeh" data-name="statusKeh${iKar}" style="display: none;" for="alpha${iKar}">
+                                  </label>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="icheck-danger d-inline">
+                                  <input value="Libur" type="radio" id="libur${iKar}" required>
+                                  <label class="inputKeh" data-name="statusKeh${iKar}" style="display: none;" for="libur${iKar}">
+                                  </label>
+                                </div>
+                              </td>
+                              <td>
+                                <input data-name="jamLembur" style="display: none;" min="1" max="1000" type="number" class="form-control inputKeh">
+                              </td>
+                              <td>
+                                <input data-name="ket" style="display: none;" type="text" class="form-control inputKeh" placeholder="tulis..." autocomplete="off">
+                              </td>
+                              <td>
+                                <button type="button" class="btn btn-warning btn-sm btnInputKeh" >
+                                  <i class="fa fa-edit"> Input</i>
+                                </button>
+                                <button style="display: none;" type="button" class="btn btn-danger btn-sm btnDeleteKeh" >
+                                  <i class="fa fa-times"> Batal</i>
+                                </button>
+                              </td>
+                            </tr>
+                            `
+    
+                          } %>
+    
+                          <%- html %>
+    
+                       <% }) %>
+    
+    
+                        
+                      </tbody>
+                    </table>
+                  </div>
+              </div>
+              <!-- /.card-body -->
+            </form>
+            </div>
+
+
+          </div>
+        </div>
+        <!-- /.row -->
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+
+<div id="myModal" class="modal fade modalUbahKeh" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+
+      </div>
+      <div class="modal-body">
+        <form action="/kehadiran" method="POST">
+          <table sid="example2" class="table table-bordered table-hover">
+            <tr>
+              <th class="alignment" rowspan="2">Nama</th>
+              <th colspan="5">Status</th>
+              <th class="alignment" rowspan="2">Jam Lembur</th>
+              <th class="alignment" rowspan="2">Keterangan</th>
+            </tr>
+            <tr>
+              <th style="background-color: green;">Masuk</th>
+              <th style="background-color: orange;">Sakit</th>
+              <th style="background-color: orange;">Izin</th>
+              <th style="background-color: red;">Alpha</th>
+              <th style="background-color: red;">Libur</th>
+            </tr>
+            <tbody>
+              <tr>
+                <input type="hidden" name="_method" value="PUT">
+                <input name="idKehadiran" class="idKehadiran" type="hidden">
+                <input name="tgl" class="tgl" type="hidden">
+                <td><input type="text" class="form-control nama" disabled></td>
+                
+                <td>
+                  <div class="icheck-success d-inline">
+                    <input class="statusKeh" name="statusKeh" value="Masuk" type="radio" id="masuk" required>
+                    <label for="masuk">
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="icheck-warning d-inline">
+                    <input class="statusKeh" name="statusKeh" value="Sakit" type="radio" id="sakit" required>
+                    <label for="sakit">
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="icheck-warning d-inline">
+                    <input class="statusKeh" name="statusKeh" value="Izin" type="radio" id="izin" required>
+                    <label for="izin">
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="icheck-danger d-inline">
+                    <input class="statusKeh" name="statusKeh" value="Alpa" type="radio" id="alpha" required>
+                    <label for="alpha">
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="icheck-danger d-inline">
+                    <input class="statusKeh" name="statusKeh" value="Libur" type="radio" id="libur" required>
+                    <label for="libur">
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <input name="jamLembur" min="0" max="1000" type="number" class="form-control jamLembur">
+                </td>
+                <td>
+                  <input name="ket" type="text" class="form-control ket" placeholder="tulis..." autocomplete="off">
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-save"> Simpan</i></button>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>
+
+<script>
+  const rowInput = document.querySelectorAll('.rowInput');
+  const tambahDataKeh = document.querySelector('.tambahDataKeh');
+  const btnDeleteKehAll = document.querySelectorAll('.btnDeleteKeh');
+
+  rowInput.forEach(row=>{
+    const btnInputKeh = row.querySelector('.btnInputKeh');
+    const btnDeleteKeh = row.querySelector('.btnDeleteKeh');
+    const inputKeh = row.querySelectorAll('.inputKeh');
+
+    //click input
+    btnInputKeh.addEventListener('click',()=>{
+
+      //display btn
+      btnInputKeh.style.display = 'none';
+      btnDeleteKeh.style.display = '';
+      tambahDataKeh.removeAttribute('disabled');
+
+      //dispaly input/attribut Name
+      inputKeh.forEach(e=>{
+        e.style.display = '';
+
+        if(e.tagName==='LABEL'){
+          const input = e.parentElement.querySelector('input');
+          input.setAttribute('name',e.dataset.name);
+        }else{
+          e.setAttribute('name',e.dataset.name);
+        }
+      })
+
+    })
+
+    //click delete
+    btnDeleteKeh.addEventListener('click',()=>{
+      //display btn
+      btnDeleteKeh.style.display = 'none';
+      btnInputKeh.style.display = '';
+      let input = false;
+      btnDeleteKehAll.forEach(e=>{
+        console.log(e.style.display)
+        if(e.style.display!='none'){
+          input = true; 
+        }
+      })
+      if(!input){
+        tambahDataKeh.setAttribute('disabled',true);
+      }
+      //dispaly input/attribut Name
+      inputKeh.forEach(e=>{
+        e.style.display = 'none';
+
+        if(e.tagName==='LABEL'){
+          const input = e.parentElement.querySelector('input');
+          input.removeAttribute('name');
+        }else{
+          e.removeAttribute('name');
+        }
+      })
+
+    })
+  })
+  
+  const btnUbahKeh = document.querySelectorAll('.btnUbahKeh');
+  const modalUbahKeh = document.querySelector('.modalUbahKeh');
+  const statusKeh =  modalUbahKeh.querySelectorAll('.statusKeh');
+
+  btnUbahKeh.forEach((e,i)=>{
+    e.addEventListener('click',function(){
+      const dataStatusKeh = e.dataset.statuskeh;
+
+      modalUbahKeh.querySelector('.idKehadiran').value = e.dataset.idkeh;
+      modalUbahKeh.querySelector('.nama').value = e.dataset.nama;
+      modalUbahKeh.querySelector('.jamLembur').value = e.dataset.jamlembur;
+      modalUbahKeh.querySelector('.ket').value = e.dataset.ket;
+      modalUbahKeh.querySelector('.tgl').value = e.dataset.tgl;
+
+      statusKeh.forEach(e=>{
+        if(e.value == dataStatusKeh){
+          console.log('cek')
+           e.setAttribute('checked','true')
+          };
+      }) 
+    })
+  })
+  modalUbahKeh.addEventListener('click',e=>{
+    if(e.target.className.includes('modalUbahKeh')){
+      statusKeh.forEach(e=>{
+        if(e.getAttribute('checked')=='true'){
+          e.removeAttribute('checked')
+        };
+      })
+    }
+  })
+</script>

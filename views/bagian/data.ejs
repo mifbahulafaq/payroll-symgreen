@@ -6,12 +6,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>DataTables</h1>
+            <h1>Bagian</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">DataTables</li>
+              <li class="breadcrumb-item active">Bagian</li>
             </ol>
           </div>
         </div>
@@ -27,7 +27,7 @@
           <div class="card">
               
             <div class="card-header">
-                <a href="/pegawai/tambah" class="btn btn-danger"><i class="fa fa-plus"> Tambah Pegawai</i></a>
+                <a href="/bagian/tambah" class="btn btn-danger"><i class="fa fa-plus"> Tambah Bagian</i></a>
               <!-- <h3 class="card-title">DataTable with default features</h3> -->
             </div>
             <!-- /.card-header -->
@@ -36,10 +36,8 @@
                 <thead>
                 <tr>
                   <th>No.</th>
-                  <th>NP</th>
-                  <th>Nama</th>
                   <th>Bagian</th>
-                  <th>Gaji Pokok</th>
+                  <th>Uang Makan</th>
                   <th>Insentif</th>
                   <th>Aksi</th>
                 </tr>
@@ -48,26 +46,20 @@
                 <% data.forEach((e,i)=>{ %>
                 <tr >
                   <td><%= i+=1 %></td> 
-                  <td><%= e.np %></td>
-                  <td><%= e.nama %></td>
-                  <td><%= e.idBagian.namaJenis %></td>
-                  <td><%= e.gajiPokok %></td>
-                  <td><%= e.insentif %></td>
+                  <td><%= e.namaBagian %></td>
+                  <td><%= currency(e.uangMakan) %></td>
+                  <td><%= currency(e.insentif) %></td>
                   <!-- <td><%= e.insentif %></td> -->
                   <td>
                       <div class="btn-group" style="color: white;">
-
-
-                        <a class="btn btn-success btn-flat" href="/pegawai/edit/<%= e._id %>">
+                        <a class="btn btn-success btn-flat" href="/bagian/edit/<%= e.idBagian%>">
                             <i class="fas fa-edit " style="color: white;"></i>
                           </a>
-                          <form  action="/pegawai/hapus/<%= e._id %>" method="POST">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="btn btn-danger btn-flat"> <i class="fas fa-trash" style="color: white;"></i></button>
-                          </form>
-                         
-                          
-
+                        <form  action="/bagian" method="POST">
+                          <input type="hidden" name="_method" value="DELETE">
+                          <input type="hidden" name="idBagian" value="<%= e.idBagian %>">
+                          <button onclick="return confirm('Yakin ingin menghapus data?')" type="submit" class="btn btn-danger btn-flat"> <i class="fas fa-trash" style="color: white;"></i></button>
+                        </form>
                       </div>
                     
                   </td>

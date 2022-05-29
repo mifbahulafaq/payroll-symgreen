@@ -1,0 +1,221 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Karyawan</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Karyawan</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+         
+            
+          <div class="card">
+              
+            <div class="card-header">
+                
+              <!-- <h3 class="card-title">DataTable with default features</h3> -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <% if(login==="HRD") {%>
+                <a style="margin-bottom: 3px;" href="/karyawan/tambah" class="btn btn-success btn-sm"><i class="fa fa-user-plus"> Tambah Karyawan</i></a>
+              <% } %>
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <!-- <th>image</th> -->
+                  <th>No.</th>
+                  <th>NIK</th>
+                  <th>Nama</th>
+                  <th>Bagian</th>
+                  <th>Jenis Kelamin</th>
+                  <th>Upah</th>
+                  <th>Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <%
+              function time(time){
+                return (time <= 9)?'0'+time:time;
+              }
+                
+                data.forEach((e,i)=>{ 
+                  
+                  //const tglLahir = new Date(e.tglLahir);
+                  //const tglMasuk = new Date(e.tglMasuk);
+                  const {karyawan : kar, bagian : bag} = e;
+                  
+                %>
+                  
+                <tr >
+                  <!-- <td><img src="../../<%= e.foto %>" alt=""><%= e.foto %></td> -->
+                  <td><%= i+=1 %></td> 
+                  <td><%= kar.nik %></td>
+                  <td><%= kar.nama %></td>
+                  <td><%= bag.namaBagian %></td>
+                  <td><%= kar.jenKelamin %></td>
+                  <td><%= currency(kar.upahPerHari) %></td>
+                  <!-- <td><%=// e.insentif %></td> -->
+                  <td> 
+                    <div class="row">
+
+                      <button  style="margin-right: 2px;" type="button" class="btn btn-sm btn-success btnDetailPegawai"
+                      data-toggle="modal"
+                      data-target="#modalDetailPegawai"
+                      data-foto = "<%= kar.foto %>"
+                      data-nik="<%= kar.nik %>"
+                      data-nama="<%= kar.nama %>"
+                      data-jenKelamin="<%= kar.jenKelamin %>"
+                      data-agama="<%= kar.agama %>"
+                      data-alamat="<%= kar.alamat %>"
+                      data-tempat="<%= kar.tempat %>"
+                      data-tglLahir="<%= moment(kar.tglLahir).format('DD-MM-YYYY')%>"
+                      data-bagian="<%= bag.namaBagian %>"
+                      data-upahperhari="<%= currency(kar.upahPerHari) %>"
+                      data-insentif="<%= currency(bag.insentif) %>"
+                      data-noTelp="<%= kar.noTelp %>"
+                      data-tglMasuk="<%= moment(kar.tglMasuk).format('DD-MM-YYYY') %>"
+                      ><i class="fa fa-list-alt"></i> Detail</button>
+                      <% if(login==="HRD") {%>
+                        <a class="btn btn-default btn-sm" href="/karyawan/edit/<%= kar.nik %>">
+                          <i class="fas fa-edit " ></i>
+                        </a>
+  
+                        <form  action="/karyawan" method="POST">
+                          <input type="hidden" name="_method" value="DELETE">
+                          <input type="hidden" name="foto" value="<%= kar.foto %>">
+                          <input type="hidden" name="nik" value="<%= kar.nik %>">
+                          <button onclick="return confirm('Yakin ingin menghapus data?')" type="submit" class="btn btn-default btn-sm"> <i class="fas fa-trash-alt" ></i></button>
+                        </form>
+                      <% } %>
+
+                    </div>
+                  </td>
+                </tr>
+                <%} ); %>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+  <!-- /.content-wrapper -->
+
+     <!-- Modal -->
+
+     <div class="modal fade" id="modalDetailPegawai" role="dialog" >
+      <div class="modal-dialog modal-lg" style="width: 600px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4> -->
+          </div>
+          <div class="modal-body modalDetailPegawai">
+  
+            <div class="container">          
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      <img style="width: 150px; height: 150px; margin-left: 140px;" class="foto profile-user-img img-fluid">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong> NIK</strong></td>
+                    <td class="nik"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> Nama</strong></td>
+                    <td class="nama"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> Jenis Kelamin</strong></td>
+                    <td class="jenKelamin"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> Agama</strong></td>
+                    <td class="agama"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> Alamat</strong></td>
+                    <td class="alamat"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> Tempat Tanggal Lahir</strong></td>
+                    <td class="ttl"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> Bagian</strong></td>
+                    <td class="bagian"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> Upah</strong></td>
+                    <td class="upahPerHari"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> Insentif</strong></td>
+                    <td class="insentif"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> No. Telpon</strong></td>
+                    <td class="noTelp"></td>
+                  </tr>
+                  <tr>
+                    <td><strong> Tanggal Masuk</strong></td>
+                    <td class="tglMasuk"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      
+  const btnDetailPegawai = document.querySelectorAll('.btnDetailPegawai');
+  const modalDetailPegawai = document.querySelector('.modalDetailPegawai');
+
+  btnDetailPegawai.forEach(e=>{
+    e.addEventListener('click',function(){
+      modalDetailPegawai.querySelector('.foto').setAttribute('src','../'+this.dataset.foto);
+      modalDetailPegawai.querySelector('.foto').setAttribute('alt',this.dataset.foto);
+      modalDetailPegawai.querySelector('.nik').innerHTML =this.dataset.nik;
+      modalDetailPegawai.querySelector('.nama').innerHTML =this.dataset.nama;
+      modalDetailPegawai.querySelector('.jenKelamin').innerHTML =this.dataset.jenkelamin;
+      modalDetailPegawai.querySelector('.agama').innerHTML =this.dataset.agama;
+      modalDetailPegawai.querySelector('.alamat').innerHTML =this.dataset.alamat;
+      modalDetailPegawai.querySelector('.ttl').innerHTML =this.dataset.tempat+', '+this.dataset.tgllahir;
+      modalDetailPegawai.querySelector('.bagian').innerHTML =this.dataset.bagian;
+      modalDetailPegawai.querySelector('.upahPerHari').innerHTML =this.dataset.upahperhari;
+      modalDetailPegawai.querySelector('.insentif').innerHTML =this.dataset.insentif;
+      modalDetailPegawai.querySelector('.noTelp').innerHTML =this.dataset.notelp;
+      modalDetailPegawai.querySelector('.tglMasuk').innerHTML =this.dataset.tglmasuk;
+  
+    })
+  })
+
+    </script>

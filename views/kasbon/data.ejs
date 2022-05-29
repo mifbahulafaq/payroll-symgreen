@@ -5,12 +5,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>DataTables</h1>
+            <h1>Kasbon</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">DataTables</li>
+              <li class="breadcrumb-item active">Kasbon</li>
             </ol>
           </div>
         </div>
@@ -33,7 +33,9 @@
 
 
             <div class="card-body">
-              <a style="margin-bottom: 3px;" href="/kasbon/tambah" class="btn btn-success btn-sm"><i class="fa fa-plus-square"> Tambah Kasbon</i></a>
+              <% if(login==="Administrasi") { %>
+                <a style="margin-bottom: 3px;" href="/kasbon/tambah" class="btn btn-success btn-sm"><i class="fa fa-plus-square"> Tambah Kasbon</i></a>
+              <% } %>
               <% if(messages.error){ %>
                 <div class="alert alert-danger alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -48,13 +50,13 @@
                     <%- messages.success %>
                   </div>
                 <% } %>
-                <div class="alert" style="margin: 0px 0px 0px 0px; background-color: #99ccff ; height: 50px;"><p style="font-size: 15px;"> Catatan : <em><u>Pembayaran akan dilakukan pada saat Penggajian!! </u></em></p>
+                <div class="alert" style="margin: 0px 0px 0px 0px; background-color: #99ccff ; height: 50px;"><p style="font-size: 15px;"> Catatan : <em><u>Pembayaran akan dilakukan pada saat Penggajian.. </u></em></p>
                 </div>
               <table id="example2" class="table table-bordered">
                 <thead>
                 <tr>
                   <th>Status</th>
-                  <th>NIP</th>
+                  <th>NIK</th>
                   <th>Nama</th>
                   <th>Jumlah</th>
                   <th>Sisa Kasbon</th>
@@ -78,58 +80,55 @@
                 }
 
                 data.forEach((e,i)=>{ 
-                  const tanggal = new Date(e.tglKasbon);
-                  function tgl(tgl){
-                    return (tgl <= 9)?'0'+tgl:tgl;
-                  }
+                  const {kasbon:kas, karyawan:kar} = e;
+                  
                   let bg = 'bg-danger';
                   let potongan = '';
 
-                  if(e.status == 'Lunas') bg = 'bg-success';  
-                  if(e.bayar > 0) potongan = `- ${rupiah(e.bayar)}`;
+                  if(kas.statusKas == 'Lunas') bg = 'bg-success';  
+                  if(kas.bayar > 0) potongan = `- ${rupiah(kas.bayar)}`;
                   %>
                   <tr>
-                    <td><p class="<%= bg %>" style="width:fit-content;"><%= e.status %></p></td>
-                    <td><%= e.idPegawai.nip %></td>
-                    <td><%= e.idPegawai.nama %></td>
-                    <td><%= rupiah(e.jmlKasbon) %></td>
-                    <td><%= rupiah(e.sisaKasbon) %> <p style="color: red;"><%= potongan %></p></td>
-                    <td><%= tgl(tanggal.getDate()) %>/<%= tgl(tanggal.getMonth()+1 ) %>/<%=tanggal.getFullYear() %></td>
+                    <td><p class="<%= bg %>" style="width:fit-content;"><%= kas.statusKas %></p></td>
+                    <td><%= kar.nik %></td>
+                    <td><%= kar.nama %></td>
+                    <td><%= rupiah(kas.jumlah) %></td>
+                    <td><%= rupiah(kas.sisa) %> <p style="color: red;"><%= potongan %></p></td>
+                    <td><%= kas.tgl %></td>
                     <td>
                       <%
                       
-                      if(e.status == 'Belum Lunas'){ %>
+                      if(kas.statusKas == 'Belum Lunas' && login === "Administrasi"){ %>
                         <form action="/kasbon/bayar" method="POST" style="display: none;" class="formBayar">
                             <input type="hidden" name="_method" value="PUT">
-                            <input type="hidden" name="id" value="<%= e.id %>">
-                            <input style="margin-bottom: 5px;" class="form-control currency" type="text" name="bayar" value="<%= potongan %>" required>
+                            <input type="hidden" name="idKasbon" value="<%= kas.idKasbon %>">
+                            <input style="margin-bottom: 5px;" class="form-control currency" type="text"  data-sisa="<%= kas.sisa %>" name="bayar" value="<%= potongan %>" autocomplete="off" required>
                             <div class="btn-group">
-                              <button type="submit" class="btn btn-success btn-sm" style="color: white;">Bayar
+                              <button type="submit" class="btn btn-success btn-sm btnFormBayar" style="color: white;">Bayar
                               </button>
                               <button type="button" class="btn btn-danger btn-sm kembaliFormKasbon" style="color: white;"><i class="fa fa-arrow-circle-left	
                                 "></i> Batal
                               </button>
                             </div>
-
                         </form>
 
                       <div class="row aksi">
 
-                        <button data-value="<%= e.bayar %>" data-id="<%= e.id %>" class="btn btn-success btn-sm bayarKasbon" style="color: white; margin-right: 2px;">Bayar
+                        <button data-value="<%= kas.bayar %>" data-id="<%= kas.idKasbon %>" class="btn btn-success btn-sm bayarKasbon" style="color: white; margin-right: 2px;">Bayar
                         </button>
 
                         <form  action="/kasbon/lunasi" method="POST">
                           <input type="hidden" name="_method" value="PUT">
-                          <input type="hidden" name="id" value="<%= e.id %>">
-                          <input type="hidden" name="nip" value="<%= e.idPegawai.nip %>">
+                          <input type="hidden" name="idKasbon" value="<%= kas.idKasbon %>">
+                          <input type="hidden" name="nik" value="<%= kar.nik %>">
                           <button onclick="return confirm('Yakin ingin Melunasi??')" type="submit" class="btn btn-success btn-sm" style="color: white; margin-left:0px;"></i>Lunasi</button>
                         </form>
                       <% }else{ %>
-                          <form  action="/kasbon" method="POST">
+                          <!-- <form  action="/kasbon" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="id" value="<%= e.id %>">
+                            <input type="hidden" name="id" value="<%= //kas.idKasbon %>">
                             <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-trash-alt"></i></button>
-                          </form>
+                          </form> -->
 
                       <% } %>
 

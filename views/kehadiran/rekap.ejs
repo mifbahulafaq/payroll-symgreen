@@ -1,0 +1,166 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Rekap Kehadiran</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Rekap</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+       <!-- /.row -->
+       <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+              </div>
+
+              <!-- /.card-header -->
+              
+              <div class="card-body">
+                  <!-- <form action="/absensi/search" method="POST" class="col-3" style="margin: 0px 0px 0px 300px;">
+                      <div class="input-group input-group-sm ">
+                        <input type="date" name="inputSearch" class="form-control" value="2020-07-19">
+                        <span class="input-group-append">
+                          <button type="submit" name="search" class="btn btn-primary btn-sm">Search</button>
+                        </span>
+                      </div>
+                  </form> -->
+                    <!-- <div class="card-tools">
+                      <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+    
+                        <div class="input-group-append">
+                          <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                      </div>
+  
+                    </div> -->
+             
+                  <%
+                    const hari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+                    const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                  %>
+                  <!-- Date range -->
+                  <form  action="/kehadiran/rekap" method="POST">
+                    <div class="form-group row col-10 mb-2">
+                        <label class="col-form-label" for="">Tanggal Periode :</label>
+                        <div class="col-3">
+                            <input value="<%= gt %>" name="gt" class="form-control" type="date" required>
+                        </div>
+                        <label class="col-form-label" for="">s/d</label>
+                        <div class="input-group col-4">
+                            <input value="<%= lt %>" name="lt" class="form-control" type="date" required>
+                            <span class="input-group-append">
+                                <button type="submit" class="btn btn-success">Tampilkan</button>
+                            </span>
+                        </div>
+                    </div>
+                  </form>
+                  <%
+
+                    let gt2 = '---',
+                        lt2 = '---';
+                        if(gt!='' && lt!=''){
+                            gt2 = `${moment(gt).dates()} ${bulan[moment(gt).month()]} ${moment(gt).year()}`;
+                            lt2 = `${moment(lt).dates()} ${bulan[moment(lt).month()]} ${moment(lt).year()}`;
+                        }
+                  %>
+                  <div class="alert" style="margin-bottom: 0px; background-color: #99ccff ;">Rekap kehadiran Tanggal <strong><%= gt2 %> s/d <%= lt2 %></strong></strong>
+                  </div>
+                  <div class="table-responsive-lg">
+                    <table id="example2" class="table table-bordered table-hover" >
+                      <thead>
+                      <tr>
+                        <th rowspan="2">No.</th>
+                        <th rowspan="2">NIK</th>
+                        <th rowspan="2">Nama</th>
+                        <th>Masuk</th>
+                        <th>Sakit</th>
+                        <th>Izin</th>
+                        <th>Alpha</th>
+                        <th>Libur</th>
+                        <th rowspan="2">Jam Lembur</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        
+                        <% if(data.length>1){ 
+                            const [keh,kar] = data;
+                            kar.forEach((eKar,i)=>{
+                                let masuk = 0,
+                                    sakit = 0,
+                                    izin = 0,
+                                    alpha = 0,
+                                    libur = 0,
+                                    jamLembur = 0;
+                                    keh.forEach(eKeh=>{
+                                        if(eKar.nik==eKeh.nik){
+                                            switch (eKeh.statusKeh) {
+                                                case 'Masuk':
+                                                  masuk+=1;
+                                                  break;
+                                                case 'Sakit':
+                                                  sakit+=1;
+                                                  break;
+                                                case 'Izin':
+                                                  izin+=1;
+                                                  break;
+                                                case 'Alpa':
+                                                  alpha+=1;
+                                                  break;
+                                                case 'Libur':
+                                                  libur+=1;
+                                                  break;
+                                              }
+                                              jamLembur+=eKeh.jamLembur
+                                        }
+                                    })
+                            %>
+                            <tr>
+                                <td><%= i+1 %></td>
+                                <td><%= eKar.nik %></td>
+                                <td><%= eKar.nama %></td>
+                                <td><%= masuk %></td>
+                                <td><%= sakit %></td>
+                                <td><%= izin %></td>
+                                <td><%= alpha %></td>
+                                <td><%= libur %></td>
+                                <td><%= jamLembur%></td>
+                                </td>
+                              </tr>
+                            <%})
+                        }else{%>
+                            <tr>
+                                <td style="text-align: center;" colspan="9">
+                                    <b> Pilih tanggal periode</b>
+                                </td>
+                            </tr>
+                        <% } %>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+
+
+          </div>
+        </div>
+        <!-- /.row -->
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->

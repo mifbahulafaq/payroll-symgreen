@@ -1,0 +1,261 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1></h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">tambah</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-12">
+            <!-- Horizontal Form -->
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Tambah Gaji</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form method="POST" action="/gaji" class="form-horizontal">
+                <div class="card-body">
+
+                  <table class="table table-bordered tblTmbhGaji">
+                    <tbody>
+                      <tr>
+                        <th style="width: 200px;">Tanggal Penggajian</th>
+                        <td><%= data.tgl %></td>
+                        <input value="<%= data.tgl %>" value="<%= data.tgl %>" name="tgl" type="hidden">
+                      </tr>
+                      <tr>
+                        <th>Tanggal Hitung</th>
+                        <td>
+                          <span><%= data.mulaiTglHit %></span>
+                          <span style="margin-left: 10px;">s/d</span>
+                          <span style="margin-left: 10px;"><%= data.mulaiTglHit %></span>
+                          <input value="<%= data.mulaiTglHit %>" name="mulaiTglHit" type="hidden" >
+                          <input value="<%= data.akhirTglHit %>" name="akhirTglHit" type="hidden" >
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>NIK</th>
+                        <td><%= data.nik %></td>
+                        <input value="<%= data.nik %>" name="nik" type="hidden">
+                      </tr>
+                      <tr>
+                        <th>Bagian</th>
+                        <td><%= data.namaBagian %></td>
+                      </tr>
+                      <tr>
+                        <th>Nama Lengkap</th>
+                        <td><%= data.nama %></td>
+                      </tr>
+                      <tr>
+                        <th>Gaji Pokok</th>
+                        <td>
+                          <span>
+                            <%= data.jumHariMasuk %> Hari
+                          </span>
+                          <span style="margin-left: 10px;">x</span>
+                          <span style="margin-left: 10px;"><%= currency(data.upahPerHari) %></span> 
+                          <span style="margin-left: 10px;">:</span>
+                          <span style="margin-left: 10px;"><%= currency(data.gajiPokok) %></span>
+                          <input value="<%= data.jumHariMasuk %>" name="jumHariMasuk" type="hidden">
+                          <input value="<%= data.gajiPokok %>" name="gajiPokok"type="hidden">
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Lembur</th>
+                        <td>
+                          <span><%= data.jumJamLembur %> Jam </span>
+                          <span style="margin-left: 10px;">:</span>
+                          <span style="margin-left: 10px;"><%= currency(data.uangLembur) %></span>
+                          <input value="<%= data.jumJamLembur %>" name="jumjamlembur" type="hidden">
+                          <input value="<%= data.uangLembur %>" name="uangLembur" type="hidden">
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Insentif</th>
+                        <td><%= currency(data.totInsentif) %></td>
+                        <input value="<%= data.totInsentif %>" name="totInsentif" type="hidden">
+                      </tr>
+                      <tr>
+                        <th>Uang Makan</th>
+                        <td><%= currency(data.uangMakan) %></td>
+                        <input value="<%= data.uangMakan %>" name="uangMakan" type="hidden">
+                      </tr>
+                      <tr>
+                        <th>Uang Lain-lain</th>
+                        <td>
+                          <div class="col-sm-3">
+                            <input name="uangLainlain" type="text" class="form-control tambUangL inputGaji"  autocomplete="off">
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Potongan Lainnya</th>
+                        <td>
+                          <div class="col-sm-3">
+                            <input name="potonganLainnya" type="text" class="form-control tambPotL inputGaji"  autocomplete="off">
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Jumlah Gaji</th>
+                        <td>
+                          <div class="col-sm-3">
+                            <input value="<%= currency(data.jumGaji) %>" name="jumGaji" type="text" class="form-control inputGaji jumGaji" id="jumGaji" readonly>
+                          </div>
+                          <%
+                          let status = '';
+                          if(data.jumGaji < data.bayar){ 
+                            status = 'disabled';
+                            %>
+                            <div style="margin: 5px 0 0 0;" class="col-sm-4">
+                              <p style="margin: 0%; color: red; font-size: 0.8rem;line-height: 1.2;">Nominal pembayaran kasbon melebihi total gaji. Pembayaran tidak dapat dilakukan. 
+                                <a style="color: red; text-decoration: underline;" href="/kasbon">Ubah</a
+                                  ></p>
+                            </div>
+                          <% } %>
+                          <div class="col-sm-5 row">
+                              <label class="col-form-label textBayar">[- Rp. <span> <%= currency(data.bayar) %></span>]</label>
+                              <input type="hidden" name="potKasbon" value="<%= data.bayar %>">
+                              <input type="hidden" name="sisa" value="<%= data.sisa %>">
+                              <input type="hidden" name="idKasbon" value="<%= data.idKasbon %>">
+                              <div style="margin: 8px 0 0 10px;" class="custom-control custom-switch">
+                                  <input style="margin-top: 10px;" type="checkbox" name="cekBayar" class="custom-control-input inpCekByr" id="customSwitch1" <%= status %> >
+                                  <label class="custom-control-label" for="customSwitch1"></label>
+                              </div>
+                              <span style="margin: 10px 0 0 -10px; font-size: 14px;">Bayar Kasbon</span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Keterangan</th>
+                        <td>
+                          <div class="col-sm-5">
+                            <textarea class="form-control" name="ket"  cols="30" rows="2" ></textarea>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-info"> <i class="fa fa-save"></i> Simpan</button>
+                </div>
+                <!-- /.card-footer -->
+              </form>
+            </div>
+            <!-- /.card -->
+
+          </div>
+          <!--/.col (left) -->
+          
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <script>
+    const regex = /[^,\d]/g;
+
+    // const tambTotGaji = document.querySelector('.tambTotGaji');
+    const tambUangL = document.querySelector('.tambUangL');
+    const tambPotL = document.querySelector('.tambPotL');
+    const jumGaji = document.querySelector('.inputGaji.jumGaji');
+    // const inputGaji = document.querySelectorAll('.inputGaji');
+    // let totGajiValue1 = Number(tambTotGaji.value.replace(regex,''));
+
+    function curr(nilai){
+      // if(nilai < 0) return -1;
+      const sisa = nilai.toString().length % 3
+      let rupiah = nilai.toString().substr(0,sisa)
+      let ribu = nilai.toString().substr(sisa).match(/\d{3}/gi)//the method match() retrieves the result ofmatching a string against a regex, and become a array
+      separator = sisa && nilai.toString().length > 3?'.':'';
+        
+      if(ribu){
+        rupiah+=separator+ribu.join('.')
+      }
+      return rupiah;
+    }
+
+
+    //cekbok bayar
+    let inpCekByr = document.querySelector('.inpCekByr');
+    const labelValueBayar = inpCekByr.parentElement.parentElement.querySelector('label');
+    const valueBayar = labelValueBayar.querySelector('span').innerHTML.replace(regex,'');
+    
+    inpCekByr.addEventListener('click',()=>{
+
+      const valueJumGaji = Number(jumGaji.value.replace(regex,''));
+      const bayarValue = Number(valueBayar.replace(regex,''));
+
+      if(inpCekByr.checked){
+
+        labelValueBayar.style.color = "red";
+        const jumGaji2 = valueJumGaji - bayarValue;
+        jumGaji.value = curr(jumGaji2);
+
+      }else{
+
+        labelValueBayar.style.color = "rgb(178, 181, 184)";
+        const jumGaji2 = valueJumGaji + bayarValue;
+        jumGaji.value = curr(jumGaji2);
+
+      }
+    })
+
+    //totGaji = 10.000
+    let valueUangL = Number(tambUangL.value.replace(regex,''));
+    tambUangL.addEventListener('input',()=>{
+
+      const valueUangL2 = Number(tambUangL.value.replace(regex,''));
+      const jumGajiValue = Number(jumGaji.value.replace(regex,''));
+      
+      jumGaji.value = jumGajiValue - valueUangL;
+      valueUangL = valueUangL2;
+
+      const jumGajiValue2 = Number(jumGaji.value.replace(regex,''));
+      tambUangL.value = curr(valueUangL2)
+      jumGaji.value = curr(jumGajiValue2 + valueUangL2);
+      // jumGajiValue1 = Number(jumGaji.value.replace(regex,''));
+      
+    })
+
+    //jumGaji = 10.000
+    let valuePotL = Number(tambPotL.value.replace(regex,''));
+    tambPotL.addEventListener('input',()=>{
+      
+      const ValuePotL2 = Number(tambPotL.value.replace(regex,''));
+      const jumGajiValue = Number(jumGaji.value.replace(regex,''));
+      
+      jumGaji.value = jumGajiValue + valuePotL;
+      valuePotL = ValuePotL2;
+      
+      const jumGajiValue2 = Number(jumGaji.value.replace(regex,''));
+      tambPotL.value = curr(ValuePotL2)
+      console.log('jumGaji.value')
+      console.log(jumGajiValue)
+      jumGaji.value = curr(jumGajiValue2 - ValuePotL2);
+      // totGajiValue1 = Number(tambTotGaji.value.replace(regex,''));
+      
+    })
+    
+  </script>

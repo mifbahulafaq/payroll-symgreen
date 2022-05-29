@@ -10,101 +10,87 @@
         font-size: 14px;
       }
       #tabelDetail{
-        width:11cm;
+        width: 11cm;
         border: 2px solid;
       }
       #tabelDetail  td {
         width: 200px;
         word-break: break-all;
       }
+      td{
+        padding-left: 3px;
+      }
     </style>
 </head>
 <body>
-  <%
-  function rupiah(nilai){
-    const sisa = nilai.toString().length % 3
-    let rupiah = nilai.toString().substr(0,sisa)
-    let ribu = nilai.toString().substr(sisa).match(/\d{3}/gi)//the method match() retrieves the result ofmatching a string against a regex, and become a array
-    separator = sisa && nilai.toString().length > 3?'.':'';
-      
-    if(ribu){
-      rupiah+=separator+ribu.join('.')
-    }
-    return "Rp. "+rupiah;
-  
-
-}
-
-  function time(time){
-    return (time <= 9)?0+time:time;
-  }
-  const tglPenggajian = new Date(dataG.tglPenggajian);
-  const mulaiTglHit = new Date(dataG.mulaiTglHit);
-  const akhirTglHit = new Date(dataG.akhirTglHit);
-
-  %>
 
 
   <table style="margin-left: 10px; margin-top: 10px;" id="tabelDetail" cellspacing="0">
     <tbody>
       <tr>
-        <td style="border-bottom: 2px solid;"><img  style="margin: auto; height: 30px; width: 100px;" src="symgreen.png" alt="logo"></td>
+        <td style="border-bottom: 2px solid;"><img  style="margin: auto; height: 30px; width: 100px;" src="/dist/img/symgreen.png" alt="logo"></td>
         <td style="border-bottom: 2px solid; text-align: left;" colspan="2"><strong>BUKTI PENERIMAAN GAJI</strong></td>
       </tr>
       <tr>
-        <td>Tanggal Penggajian</td>
-        <td class="tglPenggajian">: <%= time(tglPenggajian.getDate())%>/<%= time(tglPenggajian.getMonth()+1)%>/<%= tglPenggajian.getFullYear()%></td>
-        <td>NIP : <%= dataG.idPegawai.nip%> </td>
+        <td style="width: 2cm;">Tanggal Penggajian</td>
+        <td ></td>
+        <td ></td>
       </tr>
       <tr>
         <td style="border-bottom: 2px solid;">Tanggal Hitung</td>
-        <td style="border-bottom: 2px solid;" class="tglHitung" colspan="2">: <%= time(mulaiTglHit.getDate())%>/<%= time(mulaiTglHit.getMonth()+1)%>/<%= mulaiTglHit.getFullYear()%> - <%= time(akhirTglHit.getDate())%>/<%= time(akhirTglHit.getMonth()+1)%>/<%= akhirTglHit.getFullYear()%></td>
+        <td style="border-bottom: 2px solid;"></td>
+        <td style="border-bottom: 2px solid;"></td>
       </tr>
       <tr>
         <td>Bagian</td>
-        <td class="bagian" colspan="2">: <%= dataG.idPegawai.idBagian.namaJenis%></td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td style="border-bottom: 2px solid;">Nama</td>
-        <td style="border-bottom: 2px solid;" class="nama" colspan="2">: <%= dataG.idPegawai.nama%></td>
+        <td style="border-bottom: 2px solid;" colspan="2"></td>
       </tr>
       <tr>
           <td style="border-bottom: 1px solid #959494;" >Gaji Pokok</td>
-          <td style="border-bottom: 1px solid #959494;" class="gajiPokokHari">: <%= dataG.jumHariMasuk%> hari x <%=dataG.idPegawai.gajiPokok%></td>
-          <td style="border-bottom: 1px solid #959494;" class="totGajiPokok"> : <%= rupiah(dataG.idPegawai.gajiPokok * dataG.jumHariMasuk)  %></td>
-        </tr>
-        <tr>
-          <td style="border-bottom: 1px solid #959494;" colspan="2">Insentif</td>
-          <td style="border-bottom: 1px solid #959494;" class="insentif">: <%= rupiah(dataG.idPegawai.insentif) %></td>
+          <td style="border-bottom: 1px solid #959494;" ></td>
+          <td style="border-bottom: 1px solid #959494;" ></td>
         </tr>
         <tr>
           <td style="border-bottom: 1px solid #959494;">Lembur</td>
-          <td style="border-bottom: 1px solid #959494;" class="jumJamLembur">: <%= dataG.jumJamLembur%> Jam</td>
-          <td style="border-bottom: 1px solid #959494;" class="uangLembur">: <%= rupiah(dataG.uangLembur)%></td>
+          <td style="border-bottom: 1px solid #959494;" ></td>
+          <td style="border-bottom: 1px solid #959494;" ></td>
         </tr>
         <tr>
-          <td colspan="2">Uang Tambahan</td>
-          <td class="uangTambahan">: <%= rupiah(dataG.uangTambahan)%></td>
+          <td style="border-bottom: 1px solid #959494;" colspan="2">Insentif</td>
+          <td style="border-bottom: 1px solid #959494;" ></td>
         </tr>
         <tr>
-          <td style="border-top: 3px solid;" colspan="2">Total Gaji</td>
-          <td style="border-top: 3px solid;" class="totGaji">: <%= rupiah(dataG.totGaji)%></td>
+          <td style="border-bottom: 1px solid #959494;" colspan="2">Uang Makan</td>
+          <td style="border-bottom: 1px solid #959494;" ></td>
+        </tr>
+        <tr>
+          <td style="border-bottom: 1px solid #959494;">Uang Lain-lain</td>
+          <td style="border-bottom: 1px solid #959494;"></td>
+          <td style="border-bottom: 1px solid #959494;"></td>
         </tr>
         <tr>
           <td style="border-bottom: 3px solid;" colspan="2">Potongan Kasbon</td>
-          <td style="border-bottom: 3px solid;" class="potKasbon">: <%= rupiah(dataG.potKasbon)%></td>
+          <td style="border-bottom: 3px solid;" ></td>
         </tr>
         <tr>
-          <td style="border-bottom:double;"  colspan="2" ><strong>Jumlah Gaji Diterima</strong></td>
-          <td style="border-bottom: double;" class="gajiDiTerimah">: <%= rupiah(dataG.gajiDiTerimah)%></td>
+          <td style="border-bottom:double;" ><strong>Jumlah Gaji Diterima</strong></td>
+          <td style="border-bottom:double;"></td>
+          <td style="border-bottom: double;" ></td>
         </tr>
         <tr>
-          <td style="vertical-align: text-top; border-bottom: 2px solid;">Keterangan</td>
-          <td class="ket" colspan="2" style="vertical-align: text-top; border-bottom: 2px solid;">: <%= dataG.ket%></td>
+          <td style="vertical-align: text-top; border-bottom: 2px solid; background-color: yellow; width: 100px;">Keterangan</td>
+          <td style="vertical-align: text-top; border-bottom: 2px solid;"></td>
+          <td style="vertical-align: text-top; border-bottom: 2px solid;"></td>
         </tr>
         <tr>
-          <td colspan="2">Dibuat Oleh<br><strong>HR Dept</strong></td>
-          <td>Yang Menerima:<br><br><%= dataG.idPegawai.nama %></td>
+          <td>Dibuat Oleh<br><strong>HR Dept</strong></td>
+          <td ></td>
+          <td>Yang Menerima:<br><br></td>
         </tr>
     </tbody>
   </table>
