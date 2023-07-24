@@ -24,7 +24,7 @@ module.exports = function(router){
         const username = req.body.username;
         const password1 = req.body.password;
         const {result} = await query.select(['user',{username}]);
-        
+		
         if(result.length>0){
             const bool = await bcrypt.compare(password1, result[0].password);
             //async is recommended, if yu are using bcrypt on server. read the documentation..

@@ -14,6 +14,13 @@ const multer = require('multer');
 const upload = require('./config/upload');
 const query = require('./config/query');
 const locals = require('./locals/locals');
+const bcrypt = require('bcrypt')
+
+// async function changePwd(){
+	// const result =  await bcrypt.hash('hrd',10)
+	// console.log(result)
+// }
+// changePwd()
 
 //local variables
 app.locals = locals;
